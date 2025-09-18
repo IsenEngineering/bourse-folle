@@ -1,0 +1,66 @@
+@keyframes slidein {
+    from {
+        transform: translateX(100dvw);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.slide{
+    position: absolute;
+    bottom: 0;
+    overflow: hidden;
+    width: max-content;
+    animation: 32s linear 0s infinite slidein;
+}
+
+@import "tailwindcss";
+
+@theme {
+    --color-ie: #20396D;
+    --color-dark: #1b1b1b;
+}
+
+.btn {
+    @apply py-2 px-4 bg-ie text-white uppercase font-semibold transition-colors cursor-pointer;
+}
+.btn.disabled {
+    @apply cursor-default bg-ie/50 text-white/50;
+}
+
+main:not(.disabled) .btn:not(.disabled):hover{
+    @apply bg-ie/75
+}
+.article {
+    @apply flex flex-col items-start text-black
+}
+.article h3{
+    @apply text-2xl text-black
+}
+.article p{
+    @apply text-black/75
+}
+
+main.disabled .article{
+    @apply bg-white/25 cursor-default
+}
+
+.active{
+    @apply text-ie bg-white;
+}
+main:not(.disabled) .btn.active:hover{
+    @apply bg-white/75
+}
+
+.input >.label{
+    @apply px-2.5 py-1.5 bg-ie text-white text-xl uppercase font-semibold
+}
+
+.input >.input{
+    @apply px-2.5 py-1.5 bg-white text-ie text-xl uppercase font-semibold
+}
+
+.boisson{
+    @apply grid grid-cols-3 *:py-1 text-sm uppercase outline-none
+}

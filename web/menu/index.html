@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bourse folle - serveurs</title>
+    <link rel="stylesheet" href="/assets/global.css">
+</head>
+<body class="bg-dark text-white">
+    <nav class="p-3 overflow-y-scroll flex flex-row gap-3">
+        <a href="" class="active btn text-2xl">Menu</a>
+        <a href="" class="btn text-2xl">Evenement</a>
+        <a href="" class="btn text-2xl">Configuration</a>
+    </nav>
+    <section class="px-3 flex flex-row gap-2 items-start">
+        <button id="service" class="btn active text-ie bg-white text-2xl font-bold text-nowrap">
+            service on
+        </button>
+        <button id="undo"
+            class="btn active text-ie bg-white text-xs w-fit text-wrap text-right">
+            annuler la dernière action
+        </button>
+    </section>
+    <main id="commandes" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 p-3 gap-2 justify-start">
+        <button class="article btn active">
+            <h3>TGV</h3>
+            <p>100 Commandes</p>
+            <p>10€</p>
+        </button>
+        <button class="article btn active">
+            <h3>TGV</h3>
+            <p>100 Commandes</p>
+            <p>10€</p>
+        </button>
+        <button class="article btn active">
+            <h3>TGV</h3>
+            <p>100 Commandes</p>
+            <p>10€</p>
+        </button>
+        <button class="article btn active">
+            <h3>TGV</h3>
+            <p>100 Commandes</p>
+            <p>10€</p>
+        </button>
+        <button class="article btn active">
+            <h3>TGV</h3>
+            <p>100 Commandes</p>
+            <p>10€</p>
+        </button>
+    </main>
+    <script type="module" src="/menu/main.ts"></script>
+</body>
+</html>

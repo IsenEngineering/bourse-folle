@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bourse folle - serveurs</title>
+    <link rel="stylesheet" href="/assets/global.css">
+</head>
+<body class="bg-dark text-white">
+    <nav class="p-3 overflow-y-scroll flex flex-row gap-3">
+        <a href="" class="btn text-2xl">Menu</a>
+        <a href="" class="btn text-2xl">Evenement</a>
+        <a href="" class="active btn text-2xl">Configuration</a>
+    </nav>
+    <main class="flex flex-col w-full h-full gap-2 items-start px-3">
+        <div class="input grid grid-cols-7 w-full h-fit">
+            <div class="col-span-5 label">
+                intervalle mise a jour
+            </div>
+            <div class="col-span-2 input">
+                <span class="outline-none" contenteditable="true" id="intervalle">
+                    7
+                </span> 
+                <span class="text-xs"> Minutes</span>
+            </div>
+        </div>
+        <div class="input grid grid-cols-7 w-full h-fit">
+            <div class="col-span-5 label">
+                nouveaux appareils
+            </div>
+            <div class="col-span-2 input" id="appairage">
+                on
+            </div>
+        </div>
+        <h3 class="uppercase text-2xl mt-2 font-bold">
+            BOISSONS
+        </h3>
+        <section class="flex flex-col gap-1 w-full text-center">
+            <div class="boisson bg-ie text-white">
+                <div>
+                    boisson
+                </div>
+                <div class="border-x">
+                    prix min
+                </div>
+                <div>
+                    prix initial
+                </div>
+            </div>
+            <div class="boisson bg-white text-ie">
+                <div contenteditable="true">
+                    TGV
+                </div>
+                <div class="border-x" contenteditable="true">
+                    6€10
+                </div>
+                <div contenteditable="true">
+                    10€25
+                </div>
+            </div>
+        </section>
+        <button class="btn">
+            ajouter une boisson
+        </button>
+    </main>
+</body>
+</html>

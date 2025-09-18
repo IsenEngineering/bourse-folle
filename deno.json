@@ -1,0 +1,13 @@
+{
+    "tasks": {
+        "dev": "deno run -A web/dev.ts",
+        "build": "deno run -A web/build.ts"
+    },
+    "nodeModulesDir": "auto",
+    "imports": {
+        "@deno/vite-plugin": "npm:@deno/vite-plugin",
+        "tailwindcss": "npm:tailwindcss",
+        "@tailwindcss/vite": "npm:@tailwindcss/vite",
+        "vite": "npm:vite"
+    }
+}
