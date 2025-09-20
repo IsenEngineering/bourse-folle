@@ -1,19 +1,31 @@
-import Timer from "./timer"
-import bandeau from "./bandeau"
-import graph from "./graph"
+import Timer from "./timer.ts"
+import bandeau from "./bandeau.ts"
+import graph from "./graph.ts"
+import consume from "../utils/stream.ts"
+import { Events } from "types";
 
-const data = {
-    interval: 1000 * 60 * 7,
-    last_interval: new Date(),
-    boissons: {
-        "JAGERBOMB": 7.1,
-        "DIABOLO FRAISE": 10.10
+let t: Timer | null
+const decoder = new TextDecoder()
+consume('/api/tv', (chunk) => {
+    const payload = decoder.decode(chunk)
+    const data = JSON.parse(payload) as Events[]
+
+    for(const event of data) {
+        console.info(event)
+        switch(event.type) {
+            case 'time':
+                if(!t) {
+                    t = new Timer(event.time, () => {
+                        // finished
+                    })
+                } else {
+                    t.sync(event.time)
+                }
+                break;
+            case 'update':
+                bandeau(event.annonce)
+                graph(event.historique)
+                break;
+        }
     }
-}
-
-const t = new Timer(data.interval, () => {
-    console.log('callback')
-}, data.last_interval)
-
-bandeau(data.boissons)
-// graph()
+})

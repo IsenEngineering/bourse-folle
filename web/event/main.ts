@@ -1,12 +1,16 @@
 const start = document.getElementById('start') as HTMLButtonElement | null
-const stopp = document.getElementById('stop') as HTMLButtonElement | null
+const pause = document.getElementById('pause') as HTMLButtonElement | null
+const arret = document.getElementById('stop') as HTMLButtonElement | null
 
-if(!stopp || !start) throw new Error('missing elements')
+if(!pause || !arret || !start) throw new Error('missing elements')
 
 start.addEventListener('click', () => {
     
 })
-stopp.addEventListener('click', () => {
+arret.addEventListener('click', () => {
+
+})
+pause.addEventListener('click', () => {
 
 })
 

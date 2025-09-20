@@ -1,13 +1,28 @@
 {
+    "unstable": ["kv"],
     "tasks": {
-        "dev": "deno run -A web/dev.ts",
-        "build": "deno run -A web/build.ts"
+        "dev": "deno run --watch --allow-write --allow-env --allow-read --allow-net ./src/main.ts",
+        "dev-static": "deno run -A web/dev.ts",
+        "build-static": "deno run -A web/build.ts"
     },
     "nodeModulesDir": "auto",
     "imports": {
         "@deno/vite-plugin": "npm:@deno/vite-plugin",
+        "@panva/jose": "jsr:@panva/jose@^6.1.0",
         "tailwindcss": "npm:tailwindcss",
         "@tailwindcss/vite": "npm:@tailwindcss/vite",
-        "vite": "npm:vite"
+        "vite": "npm:vite",
+        "types": "./types.ts",
+        "@std/http/file-server": "jsr:@std/http/file-server"
+    },
+    "compilerOptions": {
+        "lib": [
+            "deno.window", "deno.ns", "deno.unstable", "dom", "dom.iterable"
+        ]
+    },
+    "lint": {
+        "rules": {
+            "exclude": ["no-window", "no-window-prefix", "no-explicit-any"]
+        }
     }
 }

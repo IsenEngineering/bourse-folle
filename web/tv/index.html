@@ -74,9 +74,28 @@
             <span>DIABOLO FRAISE 10€10 - </span>
             <span class="text-red-500">COMMIT</span>
         </div>
+        <style>
+            #boissons{
+                padding-left: 8px;
+            }
+            #boissons > span{
+                position: relative;
+                overflow: visible;
+            }
+            #boissons > span::after{
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -8px;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background-color: var(--c);
+            }
+        </style>
     </div>
 
-    <div id="graph" class="absolute -z-10 top-0 left-0 w-dvw h-dvh">
+    <div id="graph" class="absolute -z-[100] top-0 left-0 w-dvw h-dvh">
         
     </div>
     <script type="module" src="/tv/main.ts"></script>
