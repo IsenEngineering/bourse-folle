@@ -1,6 +1,7 @@
 import { Endpoint } from "./mod.ts";
 
 import { boissons, timer } from "../main.ts";
+import Live from "../controls/stream.ts";
 
 export default [
     {
@@ -22,6 +23,11 @@ export default [
                     const body = await req.text()
 
                     boissons.vente(body)
+                    Live.broadcast({
+                        type: 'vente',
+                        boisson: body,
+                        ventes: boissons.get(body).ventes
+                    })
                     return new Response('ok')
                 }
             }

@@ -6,7 +6,6 @@
         transform: translateX(-100%);
     }
 }
-
 .slide{
     position: absolute;
     bottom: 0;
@@ -63,4 +62,14 @@ main:not(.disabled) .btn.active:hover{
 
 .boisson{
     @apply grid grid-cols-3 *:py-1 text-sm uppercase outline-none
+}
+
+#commandes > button{
+    transition: background-color .3s ease-in-out;
+}
+#commandes > button.registered{
+    background-color: cyan;
+}
+#commandes > button.success{
+    background-color: greenyellow;
 }

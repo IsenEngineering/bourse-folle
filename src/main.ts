@@ -5,9 +5,8 @@ import endpoints from "./routes/mod.ts"
 import { serveDir } from "@std/http/file-server"
 
 export const boissons = new Boissons()
-export const timer = new Periodification(7)
+export const timer = new Periodification(0.25)
 
-timer.démarrer()
 await Promise.all([
     await boissons.ajouter_boisson("TGV", 9, 14),
     await boissons.ajouter_boisson("JAEGERBOMB", 7, 10),
@@ -19,6 +18,7 @@ await Promise.all([
 ])
 
 timer.callback = async () => {
+    // gérer l'évolution des prix
     await boissons.nouvelle_periode({
         "TGV": Math.floor(Math.random() * 20),
         "JAEGERBOMB": Math.floor(Math.random() * 20),
@@ -39,6 +39,8 @@ timer.callback = async () => {
         time: Math.floor(timer.temps_avant_maj() / 1000)
     })
 }
+
+timer.démarrer()
 
 Deno.serve({
     hostname: '0.0.0.0',

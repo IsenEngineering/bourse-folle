@@ -35,6 +35,10 @@ export default class Boissons {
         console.info(`[boissons.ts] Boissons syncronisées avec la BDD`)
     }
 
+    get(boisson: string) {
+        return this.list[boisson] || null
+    }
+
     async ajouter_boisson(nom: string, prix_min: number, prix_initial: number) {
         if(nom in this.list) {
             return "la boisson existe déjà"
@@ -177,10 +181,12 @@ export default class Boissons {
             }))
     }
 
-    historique(): [string, number[]][] {
+    historique(): [string, number, number, number[]][] {
         return Object.entries(this.list)
             .map(([nom, boisson]) => [
                 nom,
+                boisson.dernier_prix,
+                boisson.ventes,
                 boisson.historique.slice(-6)
             ])
     }

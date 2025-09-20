@@ -2,9 +2,7 @@ export default class Timer {
     t: number
     private interval?: number
     private element: HTMLParagraphElement
-    private callback: () => void
-    constructor(t: number, callback: () => void) {
-        this.callback = callback
+    constructor(t: number) {
         this.t = (t + 1) // temps restant
 
         this.element = document.getElementById("timer") as HTMLParagraphElement
@@ -17,7 +15,6 @@ export default class Timer {
             if(this.t <= 0 && this.interval !== undefined) {
                 clearInterval(this.interval)
                 this.interval = undefined
-                this.callback()
             } else {
                 this.t--;
                 this.update()

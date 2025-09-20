@@ -1,4 +1,6 @@
 import db from "../kv.ts"
+import { boissons } from "../main.ts";
+import Live from "./stream.ts";
 
 export default class Periodification {
     periodes: number
@@ -63,6 +65,16 @@ export default class Periodification {
     démarrer() {
         this.etat = 'demarre'
         this.set_interval()
+
+        Live.broadcast({
+            type: 'time',
+            time: Math.floor(this.temps_avant_maj() / 1000)
+        })
+        Live.broadcast({
+            type: 'update',
+            annonce: boissons.annonce(),
+            historique: boissons.historique(),
+        })
     }
 
     pause() {

@@ -15,16 +15,19 @@ export default [
                 start(controller) {
                     live = new Live(id, controller)
 
-                    live.send({
-                        type: 'update',
-                        annonce: boissons.annonce(),
-                        historique: boissons.historique(),
-                    })
+                    if(timer.etat === "demarre") {
+                        live.send({
+                            type: 'update',
+                            annonce: boissons.annonce(),
+                            historique: boissons.historique(),
+                        })
+    
+                        live.send({
+                            type: 'time',
+                            time: Math.floor(timer.temps_avant_maj() / 1000)
+                        })
+                    }
 
-                    live.send({
-                        type: 'time',
-                        time: Math.floor(timer.temps_avant_maj() / 1000)
-                    })
                 },
                 cancel() {
                     live.close()

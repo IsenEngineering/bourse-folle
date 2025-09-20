@@ -57,7 +57,7 @@ const historiqueToPoints = (historique: number[]): Point[] => {
     return points
 }
 
-const compute = (records: [string, number[]][]): Records => {
+const compute = (records: [string, number, number, number[]][]): Records => {
     const computed: Records = {}
 
     for(const record of records) {
@@ -66,7 +66,7 @@ const compute = (records: [string, number[]][]): Records => {
         const h = fnv1aHash(boisson) 
 
         computed[boisson] = [
-            historiqueToPoints(record[1]),
+            historiqueToPoints(record[3]),
             `hsl(${ h }deg 75% 50%)`
         ]
     }
@@ -74,7 +74,7 @@ const compute = (records: [string, number[]][]): Records => {
     return computed
 }
 
-export default (records: [string, number[]][]) => {
+export default (records: [string, number, number, number[]][]) => {
     const graph = document.getElementById('graph') as HTMLDivElement
 
     const computed_records = compute(records)

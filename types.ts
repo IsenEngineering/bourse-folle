@@ -5,8 +5,14 @@ interface TimeUpdateEvent {
 
 interface UpdateEvent {
     type: 'update',
-    historique: [string, number[]][],
-    annonce: string
+    historique: [string, number, number, number[]][],
+    annonce: string,
 }
 
-export type Events = UpdateEvent | TimeUpdateEvent
+interface VenteEvent {
+    type: 'vente',
+    boisson: string,
+    ventes: number
+}
+
+export type Events = UpdateEvent | TimeUpdateEvent | VenteEvent
