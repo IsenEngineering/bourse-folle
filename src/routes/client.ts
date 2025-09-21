@@ -1,7 +1,9 @@
 import { Endpoint } from "./mod.ts";
 
-import { boissons, timer } from "../main.ts";
+import { getAll } from "./recaps.ts";
+import { boissons, periode } from "../main.ts";
 import Live from "../controls/stream.ts";
+import log from "../log.ts";
 
 export default [
     {
@@ -38,7 +40,7 @@ export default [
             if(req.method === 'GET') {
                 return new Response(
                     JSON.stringify({
-                        intervalle: Math.floor(timer.tick / 1000 / 60),
+                        intervalle: Math.floor(periode.tick / 1000 / 60),
                         boissons: boissons.json()
                     })
                 )
@@ -54,8 +56,10 @@ export default [
                 }
     
                 if(body.intervalle) {
-                    await timer.modifier_tick(body.intervalle)
-                    console.log(`[client.ts] durée de période modifée à ${ Math.floor(timer.tick / 1000 / 60) }min `)
+                    await periode.modifier_tick(body.intervalle)
+                    log(`client`, `durée de période modifée à ${ 
+                        Math.floor(periode.tick / 1000 / 60) 
+                    }min `)
                 }
                 if(body.boissons) {
                     for(const boisson of body.boissons) {
@@ -98,16 +102,21 @@ export default [
                 const body = await req.text() as 'pause' | 'arret' | 'demarrer'
                 switch(body) {
                     case 'arret':
-                        // ...
+                        await periode.stop()
+                        break;
                     case 'pause':
-                        timer.pause()
+                        periode.pause()
                         break;
                     case 'demarrer':
-                        timer.démarrer()
+                        periode.démarrer()
                         break;
                 }
 
                 return new Response('ok')
+            } else if(req.method === 'GET') {
+                return new Response(JSON.stringify(
+                    await getAll()
+                ))
             }
 
             return new Response('Bad Request', {

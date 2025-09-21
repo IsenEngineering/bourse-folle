@@ -21,3 +21,18 @@ interface ChangementEtat {
 }
 
 export type Events = UpdateEvent | TimeUpdateEvent | Vente | ChangementEtat
+
+type Forbidden = {
+    type: 'forbidden',
+    resp: Response
+}
+type Pass = {
+    type: 'pass'
+}
+
+type Signed = {
+    type: 'signed',
+    header: string
+}
+
+export type Protection = Forbidden | Pass | Signed

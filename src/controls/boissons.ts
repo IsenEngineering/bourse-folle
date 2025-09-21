@@ -1,6 +1,8 @@
 import db from "../kv.ts"
+import log from "../log.ts";
+import { periode } from "../main.ts"
 
-interface Boisson {
+export interface Boisson {
     prix_initial: number,
     prix_min: number,
     historique: number[],
@@ -16,7 +18,7 @@ export default class Boissons {
     }
 
     private async setup() {
-        const kv = await db()
+        const kv = await db(periode.dataset)
 
         for await (const boisson of kv.list<Boisson>({ prefix: ['boissons'] })) {
             const nom = boisson.key.at(1) as string
@@ -29,7 +31,7 @@ export default class Boissons {
             this.list[nom].historique = historique.value
         }
 
-        console.info(`[boissons.ts] Boissons syncronisées avec la BDD`)
+        log(`boissons`, `Boissons syncronisées avec la BDD`)
     }
 
     get(boisson: string) {
@@ -49,11 +51,11 @@ export default class Boissons {
             ventes: 0
         }
 
-        const kv = await db()
+        const kv = await db(periode.dataset)
         kv.set(['boissons', nom], this.list[nom])
         kv.set(['historiques', nom], this.list[nom].historique)
 
-        console.info(`[boissons.ts] Nouvelle boisson ajoutée (${ nom })`)
+        log(`boissons`, `Nouvelle boisson ajoutée (${ nom })`)
         return "ok"
     }
 
@@ -66,11 +68,11 @@ export default class Boissons {
             return "la boisson n'existe pas"
         
         delete this.list[nom]
-        const kv = await db()
+        const kv = await db(periode.dataset)
         kv.delete(['boissons', nom])
         kv.delete(['historiques', nom])
 
-        console.info(`[boissons.ts] Boisson supprimée (${ nom })`)
+        log(`boissons`, `Boisson supprimée (${ nom })`)
         return "ok"
     }
 
@@ -93,11 +95,11 @@ export default class Boissons {
             }
         }
 
-        const kv = await db()
+        const kv = await db(periode.dataset)
         kv.set(['boissons', nom], this.list[nom])
         kv.set(['historiques', nom], this.list[nom].historique)
 
-        console.info(`[boissons.ts] Boisson modifiée (${ nom })`)
+        log(`boissons`, `Boisson modifiée (${ nom })`)
 
         return "ok"
     }
@@ -119,7 +121,7 @@ export default class Boissons {
             if(this.count_latest !== t) {
                 return
             }
-            const kv = await db()
+            const kv = await db(periode.dataset)
             this.count_set.forEach(async boisson => {
                 await kv.set(['boissons', boisson], this.list[boisson])
             })
@@ -131,7 +133,7 @@ export default class Boissons {
 
     // Nouvelle période, le prix de chaque boisson est mis à jours
     async nouvelle_periode(boissons: Record<string, number>) {
-        const kv = await db()
+        const kv = await db(periode.dataset)
 
         Object.keys(this.list).forEach(async boisson => {
             if(!(boisson in boissons)) {

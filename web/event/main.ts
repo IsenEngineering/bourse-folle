@@ -66,13 +66,20 @@ const setup_recap = (recaps: [string, string][]) => {
             const a = document.createElement('a')
             a.href = href
             a.innerText = `recap ${ date }`
+            a.target = '_blank'
             a.className = `btn text-2xl`
             return a
         })
     )
 }
 
-setup_recap([
-    ['18/09', "???"],
-    ['18/09', "???"]
-])
+const setup = async () => {
+    const response = await fetch('/api/client/event')
+    if(!response.ok) return
+
+    const recaps = await response.json() as string[]
+
+    setup_recap(recaps.map(recap => ([recap, `/api/recaps/data?dataset=${ recap }`])))
+}
+
+setup()

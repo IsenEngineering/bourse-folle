@@ -16,14 +16,10 @@ const endpoints: { [route: string]: { handle: Handler, protected: boolean } } = 
 
 import client from "./client.ts"
 import tv from "./tv.ts"
+import recaps from "./recaps.ts"
+import html from "./html.ts"
 
-for(const endpoint of client) {
-    endpoints[endpoint.route] = {
-        protected: endpoint.protected || false,
-        handle: endpoint.handler
-    }
-}
-for(const endpoint of tv) {
+for(const endpoint of client.concat(tv).concat(recaps).concat(html)) {
     endpoints[endpoint.route] = {
         protected: endpoint.protected || false,
         handle: endpoint.handler

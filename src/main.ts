@@ -1,11 +1,12 @@
 import Boissons from "./controls/boissons.ts";
 import Live from "./controls/stream.ts";
-import Periodification from "./controls/timer.ts";
+import Periode from "./controls/periode.ts";
+import Auth from "./controls/auth.ts";
 import endpoints from "./routes/mod.ts"
 import { serveDir } from "@std/http/file-server"
 
+export const periode = new Periode(1)
 export const boissons = new Boissons()
-export const timer = new Periodification(1)
 
 await Promise.all([
     await boissons.add("TGV", 9, 14),
@@ -16,7 +17,7 @@ await Promise.all([
     await boissons.add("C", 12, 15),
 ])
 
-timer.effet = async () => {
+periode.effet = async () => {
     // gérer l'évolution des prix
     await boissons.nouvelle_periode({
         "TGV": Math.floor(Math.random() * 20),
@@ -34,26 +35,41 @@ timer.effet = async () => {
     })
     Live.broadcast({
         type: 'time',
-        time: Math.floor(timer.temps_restant() / 1000)
+        time: Math.floor(periode.temps_restant() / 1000)
     })
 }
+
+Auth.generateToken()
 
 Deno.serve({
     hostname: '0.0.0.0',
     port: 80
 }, async (req, info) => {
     const url = new URL(req.url)
-
+    
     if(url.pathname in endpoints) {
+        const headers = new Headers()
         const endpoint = endpoints[url.pathname]
         if(endpoint.protected) {
-            // auth logic
+            const protection = await Auth.protect(req, url)
+            switch(protection.type) {
+                case 'forbidden':
+                    return protection.resp
+                case 'signed':
+                    headers.set('Set-Cookie', protection.header)
+                    break;
+            } 
         }
         const resp = await endpoints[url.pathname].handle(req, url, info)
-        if(resp !== "next") return resp
+        if(resp !== "next") {
+            headers.forEach((value, key) => resp.headers.set(key, value))
+            return resp
+        }
     }
     
     return serveDir(req, {
-        fsRoot: './dist',
+        fsRoot: './dist/assets',
+        urlRoot: 'assets/',
+        quiet: true
     })
 })

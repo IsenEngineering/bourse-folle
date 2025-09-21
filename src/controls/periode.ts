@@ -1,9 +1,11 @@
 import db from "../kv.ts"
+import log from "../log.ts";
 import { boissons } from "../main.ts";
 import Live from "./stream.ts";
 
-export default class Periodification {
+export default class Periode {
     periodes: number // numéro de la période
+    dataset: string
     tick: number // durée des périodes
     etat: 'pause' | 'arret' | 'demarre' = 'arret' // état du chrono
     effet?: () => Promise<void> | void // action effctuée après une période
@@ -13,6 +15,7 @@ export default class Periodification {
 
     // duree en minutes
     constructor(duree: number) {
+        this.dataset = Periode.newDataset()
         this.periodes = 0
         this.tick = duree * 1000 * 60
         this.last_tick = Date.now()
@@ -20,8 +23,25 @@ export default class Periodification {
         this.setup()
     }
 
+    static newDataset() {
+        if(Deno.env.get('DEV') == 'true') {
+            return 'dev'
+        }
+
+        const dataset = new Date().toLocaleString('fr-FR', {
+            timeStyle: 'short',
+            dateStyle: 'short'
+        })
+            .replaceAll('_', '-')
+            .replaceAll('/', '-')
+            .replaceAll(' ', '_')
+            .trim()
+
+        return dataset
+    }
+
     private async setup() {
-        const kv = await db()
+        const kv = await db(this.dataset)
         const periodes = await kv.get<number>(['periodes'])
         if(periodes.value) {
             this.periodes = periodes.value
@@ -44,9 +64,9 @@ export default class Periodification {
         this.interval = setInterval(async () => {
             this.last_tick = Date.now()
             this.periodes++;
-            console.info(`[timer.ts] Vague ${ this.periodes }`)
+            log(`periode`, `Vague ${ this.periodes }`)
 
-            const kv = await db()
+            const kv = await db(this.dataset)
             await kv.set(['periodes'], this.periodes)
 
             if(this.effet) {
@@ -57,7 +77,7 @@ export default class Periodification {
 
     // duree en minutes
     async modifier_tick(duree: number) {
-        const kv = await db()
+        const kv = await db(this.dataset)
         
         this.tick = duree * 1000 * 60
         await kv.set(['tick'], this.tick)
@@ -77,6 +97,7 @@ export default class Periodification {
 
     démarrer() {
         this.etat = 'demarre'
+
         Live.broadcast({
             type: 'etat',
             etat: 'demarre'
@@ -92,15 +113,30 @@ export default class Periodification {
             type: 'time',
             time: Math.floor(this.temps_restant() / 1000)
         })
-    }
 
+        log(`periode`, `Evenement démarré`)
+    }
+    
     pause() {
         if(this.interval) clearInterval(this.interval)
-        this.etat = 'pause'
+            this.etat = 'pause'
         Live.broadcast({
             type: 'etat',
             etat: 'pause'
         })
+        log(`periode`, `Evenement en pause`)
+    }
+    async stop() {
+        if(this.interval) clearInterval(this.interval)
+            this.etat = 'arret'
+        Live.broadcast({
+            type: 'etat',
+            etat: 'arret'
+        })
+        
+        log(`periode`, `Fin evenement`)
+        this.dataset = Periode.newDataset()
+        await db(this.dataset)
     }
 
     temps_restant() {
@@ -112,7 +148,7 @@ export default class Periodification {
 
         if(Math.floor(t / 1000) > this.tick) {
             // vague -> periode
-            console.warn(`[timer.ts] Vague en retard`) 
+            log(`periode`, `Vague en retard`) 
         }
 
         return t

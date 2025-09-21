@@ -1,8 +1,9 @@
 {
     "unstable": ["kv"],
     "tasks": {
-        "dev": "deno run --watch --allow-write --allow-env --allow-read --allow-net ./src/main.ts",
+        "dev": "DEV=true deno run --watch -P=production ./src/main.ts",
         "dev-static": "deno run -A web/dev.ts",
+        "serve": "deno run -P=production ./src/main.ts",
         "build-static": "deno run -A web/build.ts"
     },
     "nodeModulesDir": "auto",
@@ -13,12 +14,25 @@
         "@tailwindcss/vite": "npm:@tailwindcss/vite",
         "vite": "npm:vite",
         "types": "./types.ts",
-        "@std/http/file-server": "jsr:@std/http/file-server"
+        "@std/http/file-server": "jsr:@std/http/file-server",
+        "@std/http/cookie": "jsr:@std/http/cookie"
     },
     "compilerOptions": {
         "lib": [
             "deno.window", "deno.ns", "deno.unstable", "dom", "dom.iterable"
         ]
+    },
+    "permissions": {
+        "production": {
+            "read": [
+                "./data", "./dist", "./src", "./types.ts"
+            ],
+            "write": [
+                "./data"
+            ],
+            "env": true,
+            "net": true
+        }
     },
     "lint": {
         "rules": {

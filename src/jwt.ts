@@ -9,7 +9,7 @@ const AUDIENCE = 'staff-kudeta'
 
 export async function sign() {
     const jwt = await new SignJWT()
-        .setProtectedHeader({ ALG })
+        .setProtectedHeader({ alg: ALG })
         .setIssuedAt()
         .setIssuer(ISSUER)
         .setAudience(AUDIENCE)
