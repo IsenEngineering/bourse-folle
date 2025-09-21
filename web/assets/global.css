@@ -53,15 +53,21 @@ main:not(.disabled) .btn.active:hover{
 }
 
 .input >.label{
-    @apply px-2.5 py-1.5 bg-ie text-white text-xl uppercase font-semibold
+    @apply px-2.5 py-1.5 bg-ie text-white text-lg uppercase font-semibold
 }
 
 .input >.input{
-    @apply px-2.5 py-1.5 bg-white text-ie text-xl uppercase font-semibold
+    @apply px-2.5 py-1.5 bg-white text-ie text-lg uppercase font-semibold
 }
 
 .boisson{
-    @apply grid grid-cols-3 *:py-1 text-sm uppercase outline-none
+    @apply grid grid-cols-7 *:py-1 text-sm uppercase outline-none
+}
+.boisson > div{
+    @apply col-span-2
+}
+.boisson > span{
+    @apply cursor-pointer transition-colors hover:bg-ie/15
 }
 
 #commandes > button{

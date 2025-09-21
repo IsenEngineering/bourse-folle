@@ -5,7 +5,7 @@ import endpoints from "./routes/mod.ts"
 import { serveDir } from "@std/http/file-server"
 
 export const boissons = new Boissons()
-export const timer = new Periodification(0.25)
+export const timer = new Periodification(1)
 
 await Promise.all([
     await boissons.ajouter_boisson("TGV", 9, 14),
@@ -14,7 +14,6 @@ await Promise.all([
     await boissons.ajouter_boisson("A", 12, 20),
     await boissons.ajouter_boisson("B", 12, 15),
     await boissons.ajouter_boisson("C", 12, 15),
-    await boissons.ajouter_boisson("D", 12, 15),
 ])
 
 timer.callback = async () => {
@@ -26,7 +25,6 @@ timer.callback = async () => {
         "A": Math.floor(Math.random() * 20),
         "B": Math.floor(Math.random() * 20),
         "C": Math.floor(Math.random() * 20),
-        "D": Math.floor(Math.random() * 20),
     })
 
     Live.broadcast({
@@ -39,8 +37,6 @@ timer.callback = async () => {
         time: Math.floor(timer.temps_avant_maj() / 1000)
     })
 }
-
-timer.démarrer()
 
 Deno.serve({
     hostname: '0.0.0.0',

@@ -90,9 +90,9 @@ export default class Boissons {
                 this.list[nom].historique = [ 
                     Boissons.prixPourHistorique(this.list[nom].prix_initial) 
                 ]
+                this.list[nom].dernier_prix = prix_initial
             }
         }
-
 
         const kv = await db()
         kv.set(['boissons', nom], this.list[nom])
@@ -135,7 +135,7 @@ export default class Boissons {
             this.count_set.forEach(async boisson => {
                 await kv.set(['boissons', boisson], this.list[boisson])
             })
-            
+
             this.count_set.clear()
             this.count_latest = undefined
         }, 1000)

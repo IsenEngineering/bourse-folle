@@ -14,7 +14,6 @@ export default [
             const stream = new ReadableStream({
                 start(controller) {
                     live = new Live(id, controller)
-
                     if(timer.etat === "demarre") {
                         live.send({
                             type: 'update',
@@ -25,6 +24,11 @@ export default [
                         live.send({
                             type: 'time',
                             time: Math.floor(timer.temps_avant_maj() / 1000)
+                        })
+                    } else {
+                        live.send({
+                            type: 'etat',
+                            etat: timer.etat
                         })
                     }
 

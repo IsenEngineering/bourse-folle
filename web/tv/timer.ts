@@ -3,7 +3,7 @@ export default class Timer {
     private interval?: number
     private element: HTMLParagraphElement
     constructor(t: number) {
-        this.t = (t + 1) // temps restant
+        this.t = t // temps restant
 
         this.element = document.getElementById("timer") as HTMLParagraphElement
         this.setup()
@@ -27,7 +27,7 @@ export default class Timer {
         this.element.innerText = `Nouveau prix dans ${ min } minutes et ${ sec } secondes`
     }
     sync(t: number) {
-        this.t = (t + 1)
+        this.t = t
         this.setup()
     }
     detach() {

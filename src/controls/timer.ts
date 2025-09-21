@@ -45,11 +45,24 @@ export default class Periodification {
         await kv.set(['tick'], this.tick)
 
         this.set_interval()
+
+        setTimeout(() => {
+            Live.broadcast({
+                type: 'update',
+                annonce: boissons.annonce(),
+                historique: boissons.historique(),
+            })
+            Live.broadcast({
+                type: 'time',
+                time: Math.floor(this.temps_avant_maj() / 1000)
+            })
+        }, 50)
     }
 
     private set_interval() {
         if(this.interval) clearInterval(this.interval)
-
+            
+        this.last_tick = Date.now()
         this.interval = setInterval(async () => {
             this.last_tick = Date.now()
             this.periodes++;
@@ -58,28 +71,41 @@ export default class Periodification {
             const kv = await db()
             await kv.set(['periodes'], this.periodes)
 
-            if(this.callback) await this.callback()
+            if(this.callback) {
+                await this.callback()
+            }
         }, this.tick)
     }
 
     démarrer() {
         this.etat = 'demarre'
+        Live.broadcast({
+            type: 'etat',
+            etat: 'demarre'
+        })
         this.set_interval()
 
-        Live.broadcast({
-            type: 'time',
-            time: Math.floor(this.temps_avant_maj() / 1000)
-        })
-        Live.broadcast({
-            type: 'update',
-            annonce: boissons.annonce(),
-            historique: boissons.historique(),
-        })
+        setTimeout(() => {
+            Live.broadcast({
+                type: 'update',
+                annonce: boissons.annonce(),
+                historique: boissons.historique(),
+            })
+            Live.broadcast({
+                type: 'time',
+                time: Math.floor(this.temps_avant_maj() / 1000)
+            })
+        }, 50)
+        
     }
 
     pause() {
         if(this.interval) clearInterval(this.interval)
         this.etat = 'pause'
+        Live.broadcast({
+            type: 'etat',
+            etat: 'pause'
+        })
     }
 
     temps_avant_maj() {

@@ -38,7 +38,11 @@ const historiqueToPoints = (historique: number[]): Point[] => {
         [ 0, Math.floor(historique[0] * height) ]
     ]
 
+
     const n = historique.length
+    if(n === 1) {
+        points.push([width, Math.floor(historique[0] * height)])
+    }
     for(let i = 1; i < n; i++) {
         const point = historique[i]
         points.push(

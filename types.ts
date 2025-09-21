@@ -9,10 +9,15 @@ interface UpdateEvent {
     annonce: string,
 }
 
-interface VenteEvent {
+interface Vente {
     type: 'vente',
     boisson: string,
     ventes: number
 }
 
-export type Events = UpdateEvent | TimeUpdateEvent | VenteEvent
+interface ChangementEtat {
+    type: 'etat',
+    etat: 'pause' | 'arret' | 'demarre'
+}
+
+export type Events = UpdateEvent | TimeUpdateEvent | Vente | ChangementEtat

@@ -43,26 +43,24 @@ export default [
             if(req.method === 'GET') {
                 return new Response(
                     JSON.stringify({
-                        intervalle: Math.floor(timer.tick / 1000)
+                        intervalle: Math.floor(timer.tick / 1000 / 60),
+                        boissons: boissons.json()
                     })
                 )
-
             } else if(req.method === 'POST') {
                 const body = await req.json() as {
                     intervalle?: number,
-                    appairage?: boolean,
                     boissons?: {
                         nom: string,
                         prix_min?: number,
                         prix_initial?: number,
-                    }[]
+                    }[],
+                    boissons_supprimees?: string[]
                 }
     
                 if(body.intervalle) {
                     await timer.modifier_tick(body.intervalle)
-                }
-                if(body.appairage) {
-                    // ?
+                    console.log('nouveau tick', timer.tick)
                 }
                 if(body.boissons) {
                     for(const boisson of body.boissons) {
@@ -85,6 +83,12 @@ export default [
                         }
                     }
                 }
+                if(body.boissons_supprimees) {
+                    for(const boisson of body.boissons_supprimees) {
+                        await boissons.retirer_boisson(boisson)
+                    }
+                }
+                return new Response('ok')
             }
             return new Response('Bad Request', { 
                 status: 400 
@@ -96,10 +100,8 @@ export default [
         route: '/api/client/event',
         async handler(req) {
             if(req.method === 'POST') {
-                const body = await req.json() as {
-                    etat: 'pause' | 'arret' | 'demarrer'
-                }
-                switch(body.etat) {
+                const body = await req.text() as 'pause' | 'arret' | 'demarrer'
+                switch(body) {
                     case 'arret':
                         // ...
                     case 'pause':

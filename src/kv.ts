@@ -1,4 +1,4 @@
-const DB_CLOSING_TIMEOUT = 1000 * 60 * 10
+const DB_CLOSING_TIMEOUT = 1000 * 60
 let global_timeout = 0
 let db: Deno.Kv | undefined = undefined
 

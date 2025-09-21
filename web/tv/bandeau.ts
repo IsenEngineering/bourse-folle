@@ -20,3 +20,19 @@ export default (boissons: string) => {
         })
     )
 }
+
+export const text = (msg: string) => {
+    const bandeau = document.getElementById('boissons') as HTMLDivElement
+
+    bandeau.querySelectorAll('span').forEach(span => 
+        span.style.display = msg.length > 0 ? 'none' : 'inline')
+
+    if(msg.length > 0) {
+        const p = document.createElement('p')
+        p.innerText = msg
+    
+        bandeau.appendChild(p)
+    } else {
+        bandeau.querySelectorAll('p').forEach(p => p.remove())
+    }
+}

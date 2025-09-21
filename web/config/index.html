@@ -24,19 +24,11 @@
                 <span class="text-xs"> Minutes</span>
             </div>
         </div>
-        <div class="input grid grid-cols-7 w-full h-fit">
-            <div class="col-span-5 label">
-                nouveaux appareils
-            </div>
-            <div class="col-span-2 input" id="appairage">
-                on
-            </div>
-        </div>
         <h3 class="uppercase text-2xl mt-2 font-bold">
             BOISSONS
         </h3>
-        <section class="flex flex-col gap-1 w-full text-center">
-            <div class="boisson bg-ie text-white">
+        <section id="boissons" class="flex flex-col gap-1 w-full text-center">
+            <div class="head boisson bg-ie text-white">
                 <div>
                     boisson
                 </div>
@@ -46,22 +38,16 @@
                 <div>
                     prix initial
                 </div>
+                <span>
+
+                </span>
             </div>
-            <div class="boisson bg-white text-ie">
-                <div contenteditable="true">
-                    TGV
-                </div>
-                <div class="border-x" contenteditable="true">
-                    6€10
-                </div>
-                <div contenteditable="true">
-                    10€25
-                </div>
-            </div>
+            
         </section>
-        <button class="btn">
+        <button id="nouvelle_boisson" class="btn">
             ajouter une boisson
         </button>
     </main>
+    <script type="module" src="/config/main.ts"></script>
 </body>
 </html>

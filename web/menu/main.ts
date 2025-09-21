@@ -7,7 +7,7 @@ const commandes = document.getElementById('commandes') as HTMLButtonElement | nu
 if(!service || !commandes) throw new Error("???")
 
 const data = {
-    service: true,
+    service: false,
 }
 
 service.addEventListener('click', () => {
