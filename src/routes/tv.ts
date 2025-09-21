@@ -23,7 +23,7 @@ export default [
     
                         live.send({
                             type: 'time',
-                            time: Math.floor(timer.temps_avant_maj() / 1000)
+                            time: Math.floor(timer.temps_restant() / 1000)
                         })
                     } else {
                         live.send({

@@ -4,8 +4,8 @@ const JWT_SECRET = new TextEncoder().encode(
     Deno.env.get('JWT_SECRET') || 'secret'
 )
 const ALG = 'HS256'
-const ISSUER = 'nogata'
-const AUDIENCE = 'etudiant-isen'
+const ISSUER = 'nogata-livio'
+const AUDIENCE = 'staff-kudeta'
 
 export async function sign() {
     const jwt = await new SignJWT()

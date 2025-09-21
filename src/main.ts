@@ -8,15 +8,15 @@ export const boissons = new Boissons()
 export const timer = new Periodification(1)
 
 await Promise.all([
-    await boissons.ajouter_boisson("TGV", 9, 14),
-    await boissons.ajouter_boisson("JAEGERBOMB", 7, 10),
-    await boissons.ajouter_boisson("DIABOLO", 3, 5),
-    await boissons.ajouter_boisson("A", 12, 20),
-    await boissons.ajouter_boisson("B", 12, 15),
-    await boissons.ajouter_boisson("C", 12, 15),
+    await boissons.add("TGV", 9, 14),
+    await boissons.add("JAEGERBOMB", 7, 10),
+    await boissons.add("DIABOLO", 3, 5),
+    await boissons.add("A", 12, 20),
+    await boissons.add("B", 12, 15),
+    await boissons.add("C", 12, 15),
 ])
 
-timer.callback = async () => {
+timer.effet = async () => {
     // gérer l'évolution des prix
     await boissons.nouvelle_periode({
         "TGV": Math.floor(Math.random() * 20),
@@ -34,7 +34,7 @@ timer.callback = async () => {
     })
     Live.broadcast({
         type: 'time',
-        time: Math.floor(timer.temps_avant_maj() / 1000)
+        time: Math.floor(timer.temps_restant() / 1000)
     })
 }
 

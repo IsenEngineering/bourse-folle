@@ -1,8 +1,5 @@
 import db from "../kv.ts"
 
-const GRAPH_MAX = 25 // euros
-const GRAPH_MIN = 3 // euros
-
 interface Boisson {
     prix_initial: number,
     prix_min: number,
@@ -39,7 +36,7 @@ export default class Boissons {
         return this.list[boisson] || null
     }
 
-    async ajouter_boisson(nom: string, prix_min: number, prix_initial: number) {
+    async add(nom: string, prix_min: number, prix_initial: number) {
         if(nom in this.list) {
             return "la boisson existe déjà"
         }
@@ -47,7 +44,7 @@ export default class Boissons {
         this.list[nom] = {
             prix_initial: prix_initial,
             prix_min: prix_min,
-            historique: [ Boissons.prixPourHistorique(prix_initial) ],
+            historique: [ prix_initial ],
             dernier_prix: prix_initial,
             ventes: 0
         }
@@ -56,26 +53,28 @@ export default class Boissons {
         kv.set(['boissons', nom], this.list[nom])
         kv.set(['historiques', nom], this.list[nom].historique)
 
+        console.info(`[boissons.ts] Nouvelle boisson ajoutée (${ nom })`)
         return "ok"
     }
 
-    boisson_existante(nom: string) {
+    exists(nom: string) {
         return (nom in this.list)
     }
 
-    async retirer_boisson(nom: string) {
-        if(nom in this.list) {
-            delete this.list[nom]
-            const kv = await db()
-            kv.delete(['boissons', nom])
-            kv.delete(['historiques', nom])
+    async delete(nom: string) {
+        if(!(nom in this.list)) 
+            return "la boisson n'existe pas"
+        
+        delete this.list[nom]
+        const kv = await db()
+        kv.delete(['boissons', nom])
+        kv.delete(['historiques', nom])
 
-            return "ok"
-        }
-        return "la boisson n'existe pas"
+        console.info(`[boissons.ts] Boisson supprimée (${ nom })`)
+        return "ok"
     }
 
-    async modifier_boisson(nom: string, prix_min?: number, prix_initial?: number) {
+    async modify(nom: string, prix_min?: number, prix_initial?: number) {
         if(!(nom in this.list)) {
             return "la boisson n'existe pas"
         }
@@ -88,7 +87,7 @@ export default class Boissons {
             this.list[nom].prix_initial = prix_initial
             if(this.list[nom].historique.length === 1) {
                 this.list[nom].historique = [ 
-                    Boissons.prixPourHistorique(this.list[nom].prix_initial) 
+                    this.list[nom].prix_initial
                 ]
                 this.list[nom].dernier_prix = prix_initial
             }
@@ -98,20 +97,9 @@ export default class Boissons {
         kv.set(['boissons', nom], this.list[nom])
         kv.set(['historiques', nom], this.list[nom].historique)
 
-        return "ok"
-    }
+        console.info(`[boissons.ts] Boisson modifiée (${ nom })`)
 
-    // donne une valeur entre 0.15 et 1.00 (affichage sur le graphique)
-    static prixPourHistorique(prix: number) {
-        const prix_bornee = Math.max(
-            Math.min(
-                GRAPH_MAX,
-                prix 
-            ),
-            GRAPH_MIN
-        )
-        const t = Math.round(prix_bornee / GRAPH_MAX * 100) / 100
-        return t
+        return "ok"
     }
 
     private count_latest?: number
@@ -148,16 +136,14 @@ export default class Boissons {
         Object.keys(this.list).forEach(async boisson => {
             if(!(boisson in boissons)) {
                 this.list[boisson].historique.push(
-                    Boissons.prixPourHistorique(this.list[boisson].dernier_prix)
+                    this.list[boisson].dernier_prix
                 )
-                return
+            } else {
+                const computed = Math.round(boissons[boisson] * 10) / 10
+                this.list[boisson].dernier_prix = computed
+                this.list[boisson].historique.push(computed)
             }
             
-            const computed = Math.round(boissons[boisson] * 100) / 100
-            this.list[boisson].dernier_prix = computed
-            this.list[boisson].historique.push(
-                Boissons.prixPourHistorique(computed)
-            )
 
             await kv.set(['boissons', boisson], this.list[boisson])
             await kv.set(['historiques', boisson], this.list[boisson].historique)

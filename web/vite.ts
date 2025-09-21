@@ -11,7 +11,7 @@ const inputs = [
 
 export default {
     plugins: [ tailwindcss(), deno() ],
-    server: {
+    server: {
         host: "0.0.0.0"
     },
     build: {
@@ -19,7 +19,7 @@ export default {
         outDir: "../dist",
         emptyOutDir: true,
         rollupOptions: {
-            input: inputs.reduce((o, input) => {
+            input: inputs.reduce((o, input) => {
                 o[input] = "./web/" + input
                 return o
             }, {} as Record<string, string>)

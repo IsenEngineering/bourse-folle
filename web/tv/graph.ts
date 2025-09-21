@@ -1,5 +1,7 @@
 import { fnv1aHash } from "../utils/hash.ts"
 
+const GRAPH_MAX = 25 // euros
+const GRAPH_MIN = 3 // euros
 const width = window.innerWidth
 const height = Math.floor(window.innerHeight / 8 * 7)
 
@@ -33,7 +35,21 @@ const svg = (
     </svg>`
 }
 
-const historiqueToPoints = (historique: number[]): Point[] => {
+// donne une valeur entre 0.15 et 1.00 (affichage sur le graphique)
+const prixPourHistorique = (prix: number) => {
+        const prix_bornee = Math.max(
+            Math.min(
+                GRAPH_MAX,
+                prix 
+            ),
+            GRAPH_MIN
+        )
+        const t = Math.round(prix_bornee / GRAPH_MAX * 100) / 100
+        return t
+    }
+
+const historiqueToPoints = (prix: number[]): Point[] => {
+    const historique = prix.map(p => prixPourHistorique(p))
     const points: [number, number][] = [
         [ 0, Math.floor(historique[0] * height) ]
     ]

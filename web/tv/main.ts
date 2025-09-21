@@ -11,7 +11,7 @@ consume('/api/tv', (chunk) => {
     const data = JSON.parse(payload) as Events[]
 
     for(const event of data) {
-        console.info(event)
+        console.debug(event)
         switch(event.type) {
             case 'time':
                 if(!t) {

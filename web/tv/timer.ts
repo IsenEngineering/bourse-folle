@@ -1,5 +1,5 @@
 export default class Timer {
-    t: number
+    private t: number
     private interval?: number
     private element: HTMLParagraphElement
     constructor(t: number) {

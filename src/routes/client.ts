@@ -11,12 +11,7 @@ export default [
             switch(req.method) {
                 case 'GET': {
                     return new Response(
-                        JSON.stringify(boissons.json()), 
-                        {
-                            headers: {
-                                'content-type': 'application/json'
-                            }
-                        }
+                        JSON.stringify(boissons.json())
                     )
                 }
                 case 'POST': {
@@ -60,32 +55,32 @@ export default [
     
                 if(body.intervalle) {
                     await timer.modifier_tick(body.intervalle)
-                    console.log('nouveau tick', timer.tick)
+                    console.log(`[client.ts] durée de période modifée à ${ Math.floor(timer.tick / 1000 / 60) }min `)
                 }
                 if(body.boissons) {
                     for(const boisson of body.boissons) {
-                        if(boissons.boisson_existante(boisson.nom)) {
-                            await boissons.modifier_boisson(
+                        if(boissons.exists(boisson.nom)) {
+                            await boissons.modify(
                                 boisson.nom, 
                                 boisson.prix_min, 
                                 boisson.prix_initial
                             )
                         } else if(boisson.prix_initial && boisson.prix_min) {
-                            await boissons.ajouter_boisson(
+                            await boissons.add(
                                 boisson.nom,
                                 boisson.prix_min, 
                                 boisson.prix_initial
                             )
                         } else {
                             console.warn(
-                                `[routes/client.ts] cas non traité (POST /api/client/config)`
+                                `[client.ts] cas non traité`
                             )
                         }
                     }
                 }
                 if(body.boissons_supprimees) {
                     for(const boisson of body.boissons_supprimees) {
-                        await boissons.retirer_boisson(boisson)
+                        await boissons.delete(boisson)
                     }
                 }
                 return new Response('ok')
@@ -105,7 +100,6 @@ export default [
                     case 'arret':
                         // ...
                     case 'pause':
-                        // ....
                         timer.pause()
                         break;
                     case 'demarrer':

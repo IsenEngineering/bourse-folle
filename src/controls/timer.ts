@@ -3,12 +3,12 @@ import { boissons } from "../main.ts";
 import Live from "./stream.ts";
 
 export default class Periodification {
-    periodes: number
-    tick: number
-    etat: 'pause' | 'arret' | 'demarre' = 'arret'
-    callback?: () => Promise<void> | void
-    private last_tick: number
+    periodes: number // numéro de la période
+    tick: number // durée des périodes
+    etat: 'pause' | 'arret' | 'demarre' = 'arret' // état du chrono
+    effet?: () => Promise<void> | void // action effctuée après une période
 
+    private last_tick: number
     private interval?: number
 
     // duree en minutes
@@ -37,28 +37,6 @@ export default class Periodification {
         }
     }
 
-    // duree en minutes
-    async modifier_tick(duree: number) {
-        const kv = await db()
-        
-        this.tick = duree * 1000 * 60
-        await kv.set(['tick'], this.tick)
-
-        this.set_interval()
-
-        setTimeout(() => {
-            Live.broadcast({
-                type: 'update',
-                annonce: boissons.annonce(),
-                historique: boissons.historique(),
-            })
-            Live.broadcast({
-                type: 'time',
-                time: Math.floor(this.temps_avant_maj() / 1000)
-            })
-        }, 50)
-    }
-
     private set_interval() {
         if(this.interval) clearInterval(this.interval)
             
@@ -71,10 +49,30 @@ export default class Periodification {
             const kv = await db()
             await kv.set(['periodes'], this.periodes)
 
-            if(this.callback) {
-                await this.callback()
+            if(this.effet) {
+                await this.effet()
             }
         }, this.tick)
+    }
+
+    // duree en minutes
+    async modifier_tick(duree: number) {
+        const kv = await db()
+        
+        this.tick = duree * 1000 * 60
+        await kv.set(['tick'], this.tick)
+
+        this.set_interval()
+
+        Live.broadcast({
+            type: 'update',
+            annonce: boissons.annonce(),
+            historique: boissons.historique(),
+        })
+        Live.broadcast({
+            type: 'time',
+            time: Math.floor(this.temps_restant() / 1000)
+        })
     }
 
     démarrer() {
@@ -85,18 +83,15 @@ export default class Periodification {
         })
         this.set_interval()
 
-        setTimeout(() => {
-            Live.broadcast({
-                type: 'update',
-                annonce: boissons.annonce(),
-                historique: boissons.historique(),
-            })
-            Live.broadcast({
-                type: 'time',
-                time: Math.floor(this.temps_avant_maj() / 1000)
-            })
-        }, 50)
-        
+        Live.broadcast({
+            type: 'update',
+            annonce: boissons.annonce(),
+            historique: boissons.historique(),
+        })
+        Live.broadcast({
+            type: 'time',
+            time: Math.floor(this.temps_restant() / 1000)
+        })
     }
 
     pause() {
@@ -108,7 +103,7 @@ export default class Periodification {
         })
     }
 
-    temps_avant_maj() {
+    temps_restant() {
         if(this.etat !== 'demarre') {
             return 0
         }
