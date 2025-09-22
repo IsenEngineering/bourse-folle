@@ -3,8 +3,9 @@ import Boisson from "./boisson.ts"
 const intervalle = document.getElementById('intervalle') as HTMLSpanElement | null
 const boissons = document.getElementById('boissons') as HTMLElement | null
 const nouvelle_boisson = document.getElementById('nouvelle_boisson') as HTMLButtonElement | null
+const k = document.getElementById('k') as HTMLElement | null
 
-if(!intervalle || !boissons || !nouvelle_boisson) throw new Error('???')
+if(!intervalle || !boissons || !nouvelle_boisson || !k) throw new Error('???')
 
 nouvelle_boisson.addEventListener('click', async () => {
     const nom = prompt('Nom de la boisson')
@@ -31,6 +32,7 @@ const setup = async () => {
     if(!response.ok) return
     
     const body = await response.json() as {
+        k: number,
         intervalle: number,
         boissons: {
             boisson: string,
@@ -43,12 +45,24 @@ const setup = async () => {
 
     intervalle.innerText = body.intervalle.toString().trim()
     intervalle.addEventListener('input', async () => {
-        const n = parseInt(intervalle.innerText)
+        const n = parseFloat(intervalle.innerText)
         if(n <= 0) return
         await fetch('/api/client/config', {
             method: 'POST',
             body: JSON.stringify({
                 intervalle: n
+            })
+        })
+    })
+
+    k.innerText = body.k.toString()
+    k.addEventListener('input', async () => {
+        const n = parseFloat(k.innerText)
+        if(n < 0) return
+        await fetch('/api/client/config', {
+            method: 'POST',
+            body: JSON.stringify({
+                k: n
             })
         })
     })

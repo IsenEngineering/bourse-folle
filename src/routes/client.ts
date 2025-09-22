@@ -4,6 +4,7 @@ import { getAll } from "./recaps.ts";
 import { boissons, periode } from "../main.ts";
 import Live from "../controls/stream.ts";
 import log from "../log.ts";
+import kv from "../kv.ts";
 
 export default [
     {
@@ -38,14 +39,19 @@ export default [
         route: '/api/client/config',
         async handler(req) {
             if(req.method === 'GET') {
+                const db = await kv(periode.dataset)
+
+                const k = await db.get<number>(['k'])
                 return new Response(
                     JSON.stringify({
+                        k: k.value || 5,
                         intervalle: Math.floor(periode.tick / 1000 / 60),
                         boissons: boissons.json()
                     })
                 )
             } else if(req.method === 'POST') {
                 const body = await req.json() as {
+                    k?: number
                     intervalle?: number,
                     boissons?: {
                         nom: string,
@@ -87,6 +93,11 @@ export default [
                         await boissons.delete(boisson)
                     }
                 }
+                if(body.k && typeof body.k == 'number') {
+                    const db = await kv(periode.dataset)
+
+                    await db.set(['k'], body.k)
+                }
                 return new Response('ok')
             }
             return new Response('Bad Request', { 
@@ -108,7 +119,7 @@ export default [
                         periode.pause()
                         break;
                     case 'demarrer':
-                        periode.démarrer()
+                        await periode.démarrer()
                         break;
                 }
 

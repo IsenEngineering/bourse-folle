@@ -26,16 +26,28 @@ export const get = async (dataset: string) => {
 
     for(const i in boissons) {
         const nom = boissons[i].key.at(1) as string
-        const historique = await db.get<number[]>(['historiques', nom])
+        const historique = await db.get<[number, number][]>(['historiques', nom])
         if(!historique.value) continue;
         boissons[i].value.historique = historique.value
     }
 
-    return boissons
-        .map(({ key, value}) => ({
-            nom: key.at(1) as string,
-            ...value
-        }))
+    const [ouverture, fermeture] = await db.getMany<[number, number]>([["ouverture"], ["fermeture"]])
+    
+    return {
+        boissons: boissons
+            .map(({ key, value}) => ({
+                prix_initial: value.prix_initial,
+                prix_min: value.prix_min,
+                nom: key.at(1) as string,
+                historique: value.historique.map((h, i) => ({
+                    periode: i + 1,
+                    prix: h[0],
+                    ventes: h[1]
+                }))
+            })),
+        ouverture: new Date(ouverture.value || 0).toLocaleString('fr-FR'),
+        fermeture: new Date(fermeture.value || 0).toLocaleString('fr-FR')
+    }
 }
 
 export default [

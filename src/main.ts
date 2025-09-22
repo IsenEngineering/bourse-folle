@@ -10,8 +10,7 @@ export const boissons = new Boissons()
 
 periode.effet = async () => {
     // gérer l'évolution des prix
-    await boissons.nouvelle_periode({
-    })
+    await boissons.nouvelle_periode()
 
     Live.broadcast({
         type: 'update',

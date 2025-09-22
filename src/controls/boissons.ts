@@ -5,7 +5,7 @@ import { periode } from "../main.ts"
 export interface Boisson {
     prix_initial: number,
     prix_min: number,
-    historique: number[],
+    historique: [number, number][], // prix, ventes
     dernier_prix: number,
     ventes: number
 }
@@ -23,7 +23,7 @@ export default class Boissons {
         for await (const boisson of kv.list<Boisson>({ prefix: ['boissons'] })) {
             const nom = boisson.key.at(1) as string
             this.list[nom] = boisson.value
-            const historique = await kv.get<number[]>([
+            const historique = await kv.get<[number, number][]>([
                 'historiques', nom
             ])
             if(!historique.value) continue;
@@ -46,7 +46,7 @@ export default class Boissons {
         this.list[nom] = {
             prix_initial: prix_initial,
             prix_min: prix_min,
-            historique: [ prix_initial ],
+            historique: [ [prix_initial, 0] ],
             dernier_prix: prix_initial,
             ventes: 0
         }
@@ -89,7 +89,7 @@ export default class Boissons {
             this.list[nom].prix_initial = prix_initial
             if(this.list[nom].historique.length === 1) {
                 this.list[nom].historique = [ 
-                    this.list[nom].prix_initial
+                    [this.list[nom].prix_initial, 0]
                 ]
                 this.list[nom].dernier_prix = prix_initial
             }
@@ -132,20 +132,38 @@ export default class Boissons {
     }
 
     // Nouvelle période, le prix de chaque boisson est mis à jours
-    async nouvelle_periode(boissons: Record<string, number>) {
+    async nouvelle_periode() {
         const kv = await db(periode.dataset)
 
-        Object.keys(this.list).forEach(async boisson => {
-            if(!(boisson in boissons)) {
-                this.list[boisson].historique.push(
-                    this.list[boisson].dernier_prix
-                )
-            } else {
-                const computed = Math.round(boissons[boisson] * 10) / 10
-                this.list[boisson].dernier_prix = computed
-                this.list[boisson].historique.push(computed)
+        const ventes_totales = Object.values(this.list).reduce((s, b) => s + b.ventes, 0)
+        let k: number
+        {
+            const coef = await kv.get<number>(['k'])
+            k = coef.value ?? 1
+
+            if(coef.value === null) {
+                log('boissons', `ATTENTION pas coefficient de la formule des prix (5 par défaut)`)
             }
-            
+        }
+        Object.keys(this.list).forEach(async boisson => {
+            const b = this.list[boisson]
+
+            let prix: number
+            if(b.ventes === 0 || ventes_totales === 0) {
+                prix = b.dernier_prix - 0.33 * k * b.dernier_prix
+            } else {
+                prix = b.dernier_prix + (b.ventes / ventes_totales - 0.2) * k * b.dernier_prix
+            }
+
+            const arrondi_majore = Math.max(
+                Math.ceil(prix * 10 ) / 10, 
+                b.prix_min
+            )
+            this.list[boisson].dernier_prix = arrondi_majore
+
+            const n = this.list[boisson].historique.push([arrondi_majore, 0])
+            this.list[boisson].historique[n - 2][1] = b.ventes
+            this.list[boisson].ventes = 0
 
             await kv.set(['boissons', boisson], this.list[boisson])
             await kv.set(['historiques', boisson], this.list[boisson].historique)
@@ -175,7 +193,7 @@ export default class Boissons {
                 nom,
                 boisson.dernier_prix,
                 boisson.ventes,
-                boisson.historique.slice(-6)
+                boisson.historique.slice(-6).map(h => h[0])
             ])
     }
 }

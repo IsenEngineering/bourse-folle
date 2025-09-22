@@ -95,7 +95,15 @@ export default class Periode {
         })
     }
 
-    démarrer() {
+    async démarrer() {
+        if(this.etat === 'demarre') return
+        if(this.etat === 'arret') {
+            this.dataset = Periode.newDataset()
+            const kv = await db(this.dataset)
+            kv.set(['ouverture'], Date.now())
+        }
+
+
         this.etat = 'demarre'
 
         Live.broadcast({
@@ -118,8 +126,10 @@ export default class Periode {
     }
     
     pause() {
+        if(this.etat !== 'demarre') return
+
         if(this.interval) clearInterval(this.interval)
-            this.etat = 'pause'
+        this.etat = 'pause'
         Live.broadcast({
             type: 'etat',
             etat: 'pause'
@@ -127,6 +137,11 @@ export default class Periode {
         log(`periode`, `Evenement en pause`)
     }
     async stop() {
+        if(this.etat !== 'arret') return
+
+        const kv = await db(this.dataset)
+        kv.set(['fermeture'], Date.now())
+
         if(this.interval) clearInterval(this.interval)
             this.etat = 'arret'
         Live.broadcast({
@@ -135,8 +150,6 @@ export default class Periode {
         })
         
         log(`periode`, `Fin evenement`)
-        this.dataset = Periode.newDataset()
-        await db(this.dataset)
     }
 
     temps_restant() {

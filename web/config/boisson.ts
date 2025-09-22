@@ -43,12 +43,12 @@ export default class Boisson {
         }
 
         min.addEventListener('input', () => {
-            const n = parseInt(min.innerText)
+            const n = parseFloat(min.innerText)
             if(n < 0) return
             this.changes(n)
         })
         init.addEventListener('input', () => {
-            const n = parseInt(init.innerText)
+            const n = parseFloat(init.innerText)
             if(n < 0) return
             this.changes(undefined, n)
         })
