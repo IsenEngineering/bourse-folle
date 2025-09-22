@@ -19,7 +19,7 @@ export default class Auth {
         log(`auth`, '')
         console.log('')
         console.log(`   authentification token regenerated`)
-        console.log(`   http://localhost?t=${this.token}`)
+        console.log(`   https://bourse-folle.isenengineering.fr?t=${this.token}`)
         console.log('')
     }
 
@@ -39,6 +39,8 @@ export default class Auth {
             const cookie: Cookie = {
                 name: 't',
                 value: jwt,
+                secure: true,
+                domain: 'bourse-folle.isenengineering.fr',
                 expires: Date.now() + 1000 * 60 * 60 * 8,
             }
             setCookie(headers, cookie)
