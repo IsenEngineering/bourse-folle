@@ -14,6 +14,15 @@
     animation: 32s linear 0s infinite slidein;
 }
 
+@media (width < 768px) {
+    .slide{
+        animation: none;
+        width: unset;
+        overflow: unset;
+        position: unset;
+    }
+}
+
 @import "tailwindcss";
 
 @theme {

@@ -13,9 +13,6 @@ export default (boissons: string) => {
             const h = fnv1aHash(boisson.split(' ').at(0)!)
             span.attributeStyleMap.set('--c', `hsl(${ h }deg 75% 50%)`)
             
-            if(i + 1 !== a.length) {
-                span.innerText += ' - '
-            }
             return span
         })
     )

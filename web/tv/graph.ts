@@ -3,7 +3,7 @@ import { fnv1aHash } from "../utils/hash.ts"
 const GRAPH_MAX = 25 // euros
 const GRAPH_MIN = 3 // euros
 const width = window.innerWidth
-const height = Math.floor(window.innerHeight / 8 * 7)
+const height = window.innerWidth < 768 ? window.innerHeight * 0.4 : Math.floor(window.innerHeight / 8 * 7)
 
 type Point = [number, number]
 type Records = Record<string, [Point[], string]>
@@ -36,24 +36,23 @@ const svg = (
 }
 
 // donne une valeur entre 0.15 et 1.00 (affichage sur le graphique)
-const prixPourHistorique = (prix: number) => {
+const prixPourHistorique = (prix: number, max: number = GRAPH_MAX, min: number = GRAPH_MIN) => {
         const prix_bornee = Math.max(
             Math.min(
-                GRAPH_MAX,
+                max + 3,
                 prix 
             ),
-            GRAPH_MIN
+            min - 3
         )
-        const t = Math.round(prix_bornee / GRAPH_MAX * 100) / 100
+        const t = Math.round(prix_bornee / (max + 3) * 100) / 100
         return t
     }
 
-const historiqueToPoints = (prix: number[]): Point[] => {
-    const historique = prix.map(p => prixPourHistorique(p))
+const historiqueToPoints = (prix: number[], max: number = GRAPH_MAX, min: number = GRAPH_MIN): Point[] => {
+    const historique = prix.map(p => prixPourHistorique(p, max, min))
     const points: [number, number][] = [
         [ 0, Math.floor(historique[0] * height) ]
     ]
-
 
     const n = historique.length
     if(n === 1) {
@@ -79,6 +78,20 @@ const historiqueToPoints = (prix: number[]): Point[] => {
 
 const compute = (records: [string, number, number, number[]][]): Records => {
     const computed: Records = {}
+    let max = records[0][3][0]
+    let min = records[0][3][0]
+
+    records.forEach(record => {
+        const max_local = Math.max(...record[3])
+        const min_local = Math.min(...record[3])
+
+        if(max < max_local) {
+            max = max_local
+        }
+        if(min > min_local) {
+            min = min_local
+        }
+    })
 
     for(const record of records) {
         const boisson = record[0]
@@ -86,7 +99,7 @@ const compute = (records: [string, number, number, number[]][]): Records => {
         const h = fnv1aHash(boisson) 
 
         computed[boisson] = [
-            historiqueToPoints(record[3]),
+            historiqueToPoints(record[3], max, min),
             `hsl(${ h }deg 75% 50%)`
         ]
     }

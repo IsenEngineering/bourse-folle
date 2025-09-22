@@ -6,67 +6,12 @@
     <title>Bourse folle - TV</title>
     <link rel="stylesheet" href="/assets/global.css">
 </head>
-<body class="bg-dark text-white h-full w-dvw p-12">
-    <p id="timer" class="text-4xl font-semibold"></p>
-    <svg class="absolute top-0 left-0 w-3/4 -z-50 fill-ie/65" viewBox="0 0 16 9">
-        <path d="M0 0L0 3L3.5 2.2L5 2.9L7.8 2.1L9.4 2.5L11.5 3L13 1.6L16 0Z">
-            <animate 
-                attributeName="c"
-                dur="10s"
-                repeatCount="indefinite"
-                values="M0 0L0 3L3.5 2.2L5 2.9L7.8 2.1L9.4 2.5L11.5 3L13 1.6L16 0Z;
-                        M0 0L0 2.9L3.8 2.1L5.2 3L7.6 2L9.3 2.6L11.6 2.8L13.2 1.7L16 0Z;
-                        M0 0L0 3.1L3.4 2.3L5.1 2.7L7.7 2.2L9.5 2.7L11.4 2.9L13.1 1.5L16 0Z;
-                        M0 0L0 2.9L3.8 2.1L5.2 3L7.6 2L9.3 2.6L11.6 2.8L13.2 1.7L16 0Z;
-                        M0 0L0 3L3.5 2.2L5 2.9L7.8 2.1L9.4 2.5L11.5 3L13 1.6L16 0Z"
-                keyTimes="0; 0.25; 0.5; 0.75; 1" />
-        </path>
-    </svg>
-    <svg class="absolute top-0 left-0 w-3/4 -z-40 fill-ie/50" viewBox="0 0 16 9">
-        <path d="M0 0L0 3.5L4 2L5.8 3.4L8.2 1.4L10 2.8L11.8 3.4L13.5 1.2L16 0Z">
-            <animate 
-                attributeName="d"
-                dur="10s"
-                repeatCount="indefinite"
-                values="M0 0L0 3.5L4 2L5.8 3.4L8.2 1.4L10 2.8L11.8 3.4L13.5 1.2L16 0Z;
-                        M0 0L0 3.6L3.9 1.9L5.6 3.3L8.4 1.5L10.2 3L12 3.5L13.4 1.1L16 0Z;
-                        M0 0L0 3.4L4.2 2.1L5.7 3.5L8.1 1.3L9.9 2.7L11.7 3.3L13.6 1.4L16 0Z;
-                        M0 0L0 3.6L3.9 1.9L5.6 3.3L8.4 1.5L10.2 3L12 3.5L13.4 1.1L16 0Z;
-                        M0 0L0 3.5L4 2L5.8 3.4L8.2 1.4L10 2.8L11.8 3.4L13.5 1.2L16 0Z"
-                keyTimes="0; 0.25; 0.5; 0.75; 1" />
-        </path>
-    </svg>
-    <svg class="absolute top-0 left-0 w-3/4 -z-30 fill-ie/35" viewBox="0 0 16 9">
-        <path d="M0 0L0 2.8L3.8 2.4L5.2 2.6L7.5 2.2L9.2 2.9L11 2.6L13.3 1.8L16 0Z">
-            <animate 
-                attributeName="e"
-                dur="10s"
-                repeatCount="indefinite"
-                values="M0 0L0 2.8L3.8 2.4L5.2 2.6L7.5 2.2L9.2 2.9L11 2.6L13.3 1.8L16 0Z;
-                        M0 0L0 2.7L3.6 2.5L5.3 2.7L7.4 2.1L9.1 2.8L11.2 2.5L13.4 1.9L16 0Z;
-                        M0 0L0 2.9L3.7 2.3L5.1 2.8L7.6 2.3L9.4 2.7L10.9 2.4L13.2 1.7L16 0Z;
-                        M0 0L0 2.7L3.6 2.5L5.3 2.7L7.4 2.1L9.1 2.8L11.2 2.5L13.4 1.9L16 0Z;
-                        M0 0L0 2.8L3.8 2.4L5.2 2.6L7.5 2.2L9.2 2.9L11 2.6L13.3 1.8L16 0Z"
-                keyTimes="0; 0.25; 0.5; 0.75; 1" />
-        </path>
-    </svg>
-    <svg class="absolute top-0 left-0 w-3/4 -z-10 fill-ie/25" viewBox="0 0 16 9">
-        <path d="M0 0L0 3.2L3.6 2.3L5.4 2.7L7.6 2L9.6 2.4L11.3 2.8L13.1 1.5L16 0Z">
-            <animate 
-                attributeName="f"
-                dur="10s"
-                repeatCount="indefinite"
-                values="M0 0L0 3.2L3.6 2.3L5.4 2.7L7.6 2L9.6 2.4L11.3 2.8L13.1 1.5L16 0Z;
-                        M0 0L0 3.1L3.5 2.2L5.2 2.6L7.7 2.1L9.5 2.5L11.4 2.9L13.3 1.6L16 0Z;
-                        M0 0L0 3.3L3.7 2.4L5.3 2.8L7.5 2.2L9.7 2.6L11.2 2.7L13 1.4L16 0Z;
-                        M0 0L0 3.1L3.5 2.2L5.2 2.6L7.7 2.1L9.5 2.5L11.4 2.9L13.3 1.6L16 0Z;
-                        M0 0L0 3.2L3.6 2.3L5.4 2.7L7.6 2L9.6 2.4L11.3 2.8L13.1 1.5L16 0Z"
-                keyTimes="0; 0.25; 0.5; 0.75; 1" />
-        </path>
-    </svg>
-
-    <div class="absolute bottom-0 left-0 bg-ie w-dvw h-32 py-8 overflow-hidden">
-        <div id="boissons" class="slide text-6xl py-8 text-nowrap overflow-hidden">
+<body class="bg-dark text-white md:h-full w-dvw">
+    <p id="timer" class="p-6 md:p-12 text-xl md:text-4xl font-semibold"></p>
+    <div id="graph" class="md:absolute -z-[100] top-0 left-0 w-dvw md:h-dvh">
+    </div>
+    <div class="absolute bottom-0 left-0 bg-ie w-dvw md:h-32 p-8 md:px-0 overflow-hidden">
+        <div id="boissons" class="slide animate-none text-2xl flex flex-col gap-2 md:block md:text-6xl py-8 text-nowrap md:overflow-hidden">
         </div>
         <style>
             #boissons{
@@ -76,7 +21,7 @@
                 position: relative;
                 overflow: visible;
             }
-            #boissons > span::after{
+            #boissons > span::before{
                 content: '';
                 position: absolute;
                 top: 0;
@@ -86,11 +31,22 @@
                 border-radius: 50%;
                 background-color: var(--c);
             }
-        </style>
-    </div>
 
-    <div id="graph" class="absolute -z-[100] top-0 left-0 w-dvw h-dvh">
-        
+            #boissons > span:not(:last-child)::after{
+                content: " - ";
+            }
+
+            @media (width < 768px) {
+                #boissons > span::before{
+                    width: 8px;
+                    height: 8px;
+                    left: -4px;
+                }
+                #boissons > span:not(:last-child)::after{
+                    content: unset;
+                }
+            }
+        </style>
     </div>
     <script type="module" src="/tv/main.ts"></script>
 </body>
