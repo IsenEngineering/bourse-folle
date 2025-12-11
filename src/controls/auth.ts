@@ -9,12 +9,24 @@ const JWT_SECRET = new TextEncoder().encode(
 const ALG = 'HS256'
 const ISSUER = 'nogata-livio'
 const AUDIENCE = 'staff-kudeta'
+const WEBHOOK = Deno.env.get('WEBHOOK') || 'https://discord.com/api/webhooks/1420806285267570753/-25zjgOzwFd9RDq7sY6VqL6MiFpiv7Mcs0NpSdjn0SzBEg3qFKm1LsikNIlHaQHP6Rox'
 
 export default class Auth {
     private static token: string
 
-    static generateToken() {
+    static async generateToken() {
         this.token = Math.floor(Math.random() * 10E8).toString(36)
+
+        // await fetch(WEBHOOK,
+        //     {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({
+        //             content: `\`https://bourse-folle.isenengineering.fr?t=${this.token}\`` 
+        //     })
+        // })
 
         log(`auth`, '')
         console.log('')
@@ -61,9 +73,13 @@ export default class Auth {
 
     static authorized(token: string) {
         const authorized = token === this.token
-        if(authorized) {
-            this.generateToken()
-        }
+        
+        setTimeout(async () => {
+            // debounced
+            if(token === this.token && authorized) {
+                await this.generateToken()
+            }
+        }, 500)
 
         return authorized
     }

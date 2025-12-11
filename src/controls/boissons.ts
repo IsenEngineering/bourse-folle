@@ -150,7 +150,7 @@ export default class Boissons {
 
             let prix: number
             if(b.ventes === 0 || ventes_totales === 0) {
-                prix = b.dernier_prix - 0.33 * k * b.dernier_prix
+                prix = b.dernier_prix - 0.15 * k * b.dernier_prix
             } else {
                 prix = b.dernier_prix + (b.ventes / ventes_totales - 0.2) * k * b.dernier_prix
             }
@@ -193,7 +193,7 @@ export default class Boissons {
                 nom,
                 boisson.dernier_prix,
                 boisson.ventes,
-                boisson.historique.slice(-6).map(h => h[0])
+                boisson.historique.slice(-16).map(h => h[0])
             ])
     }
 }
