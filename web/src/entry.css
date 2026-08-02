@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+
+@theme {
+    --color-ie: #20396E;
+    --default-font-family: "jetbrainsmono";
+    --font-jetbrains: "jetbrainsmono";
+}
+
+@font-face {
+    font-family: "jetbrainsmono";
+    src: url(/JetBrainsMono.ttf);
+}
