@@ -45,7 +45,7 @@
       "code": "R002",
       "prix": 85.2,
       "variation": -1.5,
-       "couleur": "#12301F",
+       "couleur": "rgb(98, 255, 166)",
       "historique": [
         { "prix": 90 },
         { "prix": 85 },
@@ -84,7 +84,7 @@
       "code": "R003",
       "prix": 210.75,
       "variation": 5.2,
-      "couleur": "#CCCC00",
+      "couleur": "rgb(255, 255, 67)",
       "historique": [
         { "prix": 180 },
         { "prix": 200 },
@@ -122,7 +122,7 @@
     {
       "nom": "Ressource 4",
       "code": "R004",
-       "couleur": "#AA30FF",
+       "couleur": "rgb(199, 119, 255)",
       "prix": 45.8,
       "variation": -3.1,
       "historique": [

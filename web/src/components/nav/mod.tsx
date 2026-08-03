@@ -8,9 +8,12 @@ const Chevron = () => <svg xmlns="http://www.w3.org/2000/svg"
 </svg>
 
 const Antenna = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M2 12 7 2"/><path d="m7 12 5-10"/><path d="m12 12 5-10"/>
-    <path d="m17 12 5-10"/><path d="M4.5 7h15"/><path d="M12 16v6"/>
+stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path style="animation: 2s linear .66s infinite pulse-in" d="M16.247 7.761a6 6 0 0 1 0 8.478"/>
+    <path style="animation: 2s linear 1.33s infinite pulse-in" d="M19.075 4.933a10 10 0 0 1 0 14.134"/>
+    <path style="animation: 2s linear 1.33s infinite pulse-in" d="M4.925 19.067a10 10 0 0 1 0-14.134"/>
+    <path style="animation: 2s linear .66s infinite pulse-in" d="M7.753 16.239a6 6 0 0 1 0-8.478"/>
+    <circle cx="12" cy="12" r="2" style="animation: 2s linear 0 infinite pulse-in"/>
 </svg>
 
 const Edit = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" 

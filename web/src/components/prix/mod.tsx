@@ -5,7 +5,7 @@ export const PRIX_PLACEHOLDER = placeholder.ressources.map(r => ({
     ...r,
     historique: r.historique.map((h, i) => ({
         ...h,
-        ts: i * 100
+        ts: i * 1000000
     }))
 })) satisfies BourseFolle.Ressource[]
 
@@ -28,7 +28,7 @@ export const PerformancePolyline = ({ historique, variation }: PerformanceProps)
         ((point - min) / (max - min) * 25).toPrecision(4)
     ].join(',')).join(' ')
 
-    return <svg viewBox={`0 0 150 25`} preserveAspectRatio="none" class="col-span-1 lg:col-span-3 w-full h-6">
+    return <svg viewBox={`0 0 150 25`} preserveAspectRatio="none" class="col-span-2 lg:col-span-3 w-full h-6">
         <polyline stroke-width={2} fill="none" stroke-linejoin="bevel"
             class={variation > 0 ? 'stroke-red-500' : 'stroke-green-500'}
             points={path}/>
@@ -36,12 +36,12 @@ export const PerformancePolyline = ({ historique, variation }: PerformanceProps)
 }
 
 export default ({ ressources }: Props) => <section class="h-full w-full p-3 flex flex-col gap-1 text-white">
-    <div class="grid grid-cols-8 lg:grid-cols-12 items-center gap-1 w-full text-xs lg:text-sm mb-2 text-gray-500">
-        <p class="text-xs font-black">CODE</p>            
-        <p class="col-span-4 font-semibold truncate">Nom de la ressource</p>            
+    <div class="grid grid-cols-7 lg:grid-cols-12 items-center gap-1 w-full text-xs lg:text-sm text-gray-500">
+        <p class="text-xs font-black px-1 py-0.5">CODE</p>            
+        <p class="col-span-4 font-semibold truncate hidden lg:block">Nom de la ressource</p>            
         <p class="col-span-2">Prix</p>            
-        <p class="col-span-2 hidden lg:block">Variation</p>            
-        <div class="col-span-1 lg:col-span-3 w-full truncate">Performance</div>            
+        <p class="col-span-2">Variation</p>            
+        <div class="col-span-2 lg:col-span-3 w-full truncate">Performance</div>            
     </div>
     <For 
         each={ressources} 
@@ -50,11 +50,11 @@ export default ({ ressources }: Props) => <section class="h-full w-full p-3 flex
                 Aucune ressource
             </div>
         }>
-        {ressource => <div class="grid grid-cols-8 lg:grid-cols-12 items-center gap-1 w-full text-sm">
-            <p class="text-xs font-black">{ressource.code}</p>            
-            <p class="col-span-4 font-semibold">{ressource.nom}</p>            
+        {ressource => <div class="grid grid-cols-7 lg:grid-cols-12 items-center gap-1 w-full text-sm">
+            <p class="text-xs font-black bg-white/10 px-1 py-0.5 w-fit rounded" style={`color: ${ressource.couleur};`}>{ressource.code}</p>            
+            <p class="col-span-4 font-semibold hidden lg:block">{ressource.nom}</p>            
             <p class="col-span-2">{ressource.prix}€</p>            
-            <p class={"col-span-2 hidden lg:block " + (ressource.variation > 0 ? 'text-red-500' : 'text-green-500')}>
+            <p class={"col-span-2 " + (ressource.variation > 0 ? 'text-red-500' : 'text-green-500')}>
                 {ressource.variation > 0 ? ('+' + ressource.variation) : ressource.variation}€
             </p>
             <PerformancePolyline historique={ressource.historique} variation={ressource.variation}/>

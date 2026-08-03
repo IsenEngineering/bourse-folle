@@ -16,9 +16,10 @@ export default () => <>
             <Prix ressources={PRIX_PLACEHOLDER}/>
         </section>
     </main>}>
-        <Resizable class="h-full w-full gap-3 p-3 z-20
-        flex flex-col md:flex-row" orientation="horizontal" as="main">
-            <Resizable.Panel minSize="400px" class="border-2 border-gray-700 rounded-lg 
+        <Resizable class="h-full w-full gap-3 p-3 z-20 min-h-0
+        flex flex-col md:flex-row" orientation="horizontal" as="main"
+            initialSizes={[0.7, 0.3]}>
+            <Resizable.Panel minSize="600px" class="border-2 border-gray-700 rounded-lg min-h-0
                 overflow-hidden bg-gray-700/25" as="section">
                 <Graph ressources={PRIX_PLACEHOLDER}/>
             </Resizable.Panel>

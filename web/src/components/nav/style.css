@@ -29,3 +29,8 @@ header {
         transform: translateY(-100%);
     }
 }
+
+@keyframes pulse-in {
+    from, to { opacity: 1; }
+    50% { opacity: 0.3; }
+}
