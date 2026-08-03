@@ -1,5 +1,6 @@
-import { For } from "solid-js"
+import { For, useContext } from "solid-js"
 import placeholder from "./placeholder.json"
+import { RessourcesCtx } from "../../routes"
 
 export const PRIX_PLACEHOLDER = placeholder.ressources.map(r => ({
     ...r,
@@ -35,29 +36,39 @@ export const PerformancePolyline = ({ historique, variation }: PerformanceProps)
     </svg>
 }
 
-export default ({ ressources }: Props) => <section class="h-full w-full p-3 flex flex-col gap-1 text-white">
-    <div class="grid grid-cols-7 lg:grid-cols-12 items-center gap-1 w-full text-xs lg:text-sm text-gray-500">
-        <p class="text-xs font-black px-1 py-0.5">CODE</p>            
-        <p class="col-span-4 font-semibold truncate hidden lg:block">Nom de la ressource</p>            
-        <p class="col-span-2">Prix</p>            
-        <p class="col-span-2">Variation</p>            
-        <div class="col-span-2 lg:col-span-3 w-full truncate">Performance</div>            
-    </div>
-    <For 
-        each={ressources} 
-        fallback={
-            <div class="text-gray-500 text-sm font-black animate-pulse w-full h-full flex justify-center items-center">
-                Aucune ressource
-            </div>
-        }>
-        {ressource => <div class="grid grid-cols-7 lg:grid-cols-12 items-center gap-1 w-full text-sm">
-            <p class="text-xs font-black bg-white/10 px-1 py-0.5 w-fit rounded" style={`color: ${ressource.couleur};`}>{ressource.code}</p>            
-            <p class="col-span-4 font-semibold hidden lg:block">{ressource.nom}</p>            
-            <p class="col-span-2">{ressource.prix}€</p>            
-            <p class={"col-span-2 " + (ressource.variation > 0 ? 'text-red-500' : 'text-green-500')}>
-                {ressource.variation > 0 ? ('+' + ressource.variation) : ressource.variation}€
-            </p>
-            <PerformancePolyline historique={ressource.historique} variation={ressource.variation}/>
-        </div>}
-    </For>
-</section>
+export default () => {
+    const ctx = useContext(RessourcesCtx)
+    if(!ctx) return <section class="h-full w-full flex justify-center items-center 
+        text-2xl font-black animate-pulse">
+        loading
+    </section>
+
+    const [ressources, _] = ctx
+
+    return <section class="h-full w-full p-3 flex flex-col gap-1 text-white">
+        <div class="grid grid-cols-7 lg:grid-cols-12 items-center gap-1 w-full text-xs lg:text-sm text-gray-500">
+            <p class="text-xs font-black px-1 py-0.5">CODE</p>            
+            <p class="col-span-4 font-semibold truncate hidden lg:block">Nom de la ressource</p>            
+            <p class="col-span-2">Prix</p>            
+            <p class="col-span-2">Variation</p>            
+            <div class="col-span-2 lg:col-span-3 w-full truncate">Performance</div>            
+        </div>
+        <For 
+            each={ressources} 
+            fallback={
+                <div class="text-gray-500 text-sm font-black animate-pulse w-full h-full flex justify-center items-center">
+                    Aucune ressource
+                </div>
+            }>
+            {ressource => <div class="grid grid-cols-7 lg:grid-cols-12 items-center gap-1 w-full text-sm">
+                <p class="text-xs font-black bg-white/10 px-1 py-0.5 w-fit rounded" style={`color: ${ressource.couleur};`}>{ressource.code}</p>            
+                <p class="col-span-4 font-semibold hidden lg:block">{ressource.nom}</p>            
+                <p class="col-span-2">{ressource.prix}€</p>            
+                <p class={"col-span-2 " + (ressource.variation > 0 ? 'text-red-500' : 'text-green-500')}>
+                    {ressource.variation > 0 ? ('+' + ressource.variation) : ressource.variation}€
+                </p>
+                <PerformancePolyline historique={ressource.historique} variation={ressource.variation}/>
+            </div>}
+        </For>
+    </section>
+}

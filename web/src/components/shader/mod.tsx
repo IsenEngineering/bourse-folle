@@ -186,7 +186,7 @@ function createProgram(gl: WebGL2RenderingContext, vsSource: string, fsSource: s
 }
 
 // Luminosité globale du rendu (0 = noir, 1 = luminosité normale, >1 = surexposé)
-let brightness = 0.2
+let brightness = 0.15
 
 export function setBrightness(value: number) {
     brightness = value
