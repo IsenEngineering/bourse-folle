@@ -4,6 +4,7 @@ import { createContext, JSX, onCleanup, onMount, Show } from "solid-js";
 import Resizable from "@corvu/resizable";
 import Shader from "../components/shader/mod"
 import { createStore, StoreReturn } from "solid-js/store";
+import Nav from "../components/nav/mod";
 
 const Main = (props: { graph: JSX.Element, prix: JSX.Element }) => {
     return <Show when={window.innerWidth > 900} fallback={<main class="h-full w-full gap-3 p-3 flex flex-col z-20">
@@ -53,6 +54,7 @@ export default () => {
     })
     
     return <RessourcesCtx.Provider value={[ressources, setRessources]}>
+        <Nav/>
         <div class="absolute z-10 top-0 left-0 w-screen h-full">
             <Shader/>
         </div>

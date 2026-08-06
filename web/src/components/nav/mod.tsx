@@ -55,7 +55,7 @@ export default function Nav() {
                     draggable={false}>
                     <Antenna/>
                 </a>
-                <a href="/" class="p-2 hover:bg-gray-800 transition-colors 
+                <a href="/dash" class="p-2 hover:bg-gray-800 transition-colors 
                     uppercase font-bold select-none rounded-full" 
                     draggable={false}>
                     <Edit/>

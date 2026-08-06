@@ -4,7 +4,6 @@ import 'solid-devtools';
 import { lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 import { Router, type RouteDefinition } from '@solidjs/router';
-import Nav from './components/nav/mod';
 
 const routes = [
     {
@@ -12,15 +11,34 @@ const routes = [
         component: lazy(() => import('./routes/index'))
     },
     {
-        path: "/prix",
-        component: lazy(() => import('./routes/prix'))
+        path: "/dash",
+        component: lazy(() => import('./routes/dash/layout')),
+        children: [
+            {
+                path: "/debug",
+                component: lazy(() => import('./routes/dash/debug'))
+            },
+            {
+                path: "/service",
+                component: lazy(() => import('./routes/dash/service/mod'))
+            },
+            {
+                path: "/config",
+                component: lazy(() => import('./routes/dash/config/mod'))
+            },
+            {
+                path: "/actions",
+                component: lazy(() => import('./routes/dash/actions/mod'))
+            },
+            {
+                path: "/*",
+                component: lazy(() => import('./routes/dash/index')),
+            }
+        ]
     }
 ] as RouteDefinition[]
 
 const root = document.getElementById('root');
-render(() => <>
-    <Nav/>
-    <Router>
-        {routes}
-    </Router>
-</>, root!);
+render(() => <Router>
+    {routes}
+</Router>, root!);
