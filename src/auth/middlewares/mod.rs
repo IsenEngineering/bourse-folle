@@ -1,0 +1,1 @@
+// middleware pour vérifier si la requête vient d'un client authentifié

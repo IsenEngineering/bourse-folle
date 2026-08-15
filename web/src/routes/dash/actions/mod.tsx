@@ -23,6 +23,12 @@ export default () => {
                 draggable={false}>
                 Se déconnecter
             </div>
+            <div class="hover:bg-white/25 transition-colors uppercase font-bold select-none cursor-pointer
+                bg-white/10 text-white px-2 py-1 text-xs md:text-base md:px-4 md:py-2" 
+                draggable={false}
+                onClick={() => localStorage.clear()}>
+                Vider le cache
+            </div>
         </div>
     </section>
 }

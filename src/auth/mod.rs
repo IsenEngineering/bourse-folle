@@ -1,3 +1,5 @@
-// oidc -> connect via google
-// in-memory + persistent sessions
-// middleware to authentificate requests
+mod sso;
+mod session;
+mod middlewares;
+
+// logout -> header "Clear-Site-Data: *"

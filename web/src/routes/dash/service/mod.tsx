@@ -9,8 +9,11 @@
 // }
 
 import Resizable from "@corvu/resizable";
+import { createSignal, onMount } from "solid-js";
 
 export default () => {
+    const [aide, setAide] = createSignal(localStorage.getItem('aide') !== '0')
+
     return <Resizable class="text-white font-jetbrains h-full w-full overflow-y-auto sm:overflow-hidden" 
         orientation={ window.innerWidth < 640 ? 'vertical' : 'horizontal'} as="main"
         initialSizes={[0.1, 0.9]}>
@@ -42,7 +45,8 @@ export default () => {
         <Resizable.Handle class="w-1"/>
         <Resizable.Panel class="p-2 md:p-4 gap-2 md:gap-4 content-start
             grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6" as="section">
-            <div class="text-xs md:text-sm
+            <div style={aide() ? '' : 'display: none'} 
+                class="text-xs md:text-sm
                 col-span-2 md:col-span-3 lg:col-span-5 xl:col-span-6">
                 Activez le <strong>mode service</strong> pour pouvoir mettre à jours le prix des boissons.<br/>
                 En cliquant sur une boisson vous faite augmenter son prix.<br/>
@@ -51,7 +55,11 @@ export default () => {
 
                 <div class="hover:bg-white/25 transition-colors uppercase font-bold select-none cursor-pointer
                 bg-white/10 text-white px-2 py-1 text-xs w-fit mt-1.5" 
-                draggable={false}>
+                draggable={false}
+                onClick={() => {
+                    setAide(false)
+                    localStorage.setItem('aide', '0')
+                }}>
                     Masquer l'aide
                 </div>
             </div>
