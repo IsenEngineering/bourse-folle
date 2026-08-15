@@ -24,11 +24,35 @@ const routes = [
             },
             {
                 path: "/config",
-                component: lazy(() => import('./routes/dash/config/mod'))
+                component: lazy(() => import('./routes/dash/config/layout')),
+                children: [
+                    {
+                        path: '/settings',
+                        component: lazy(() => import('./routes/dash/config/settings'))
+                    },
+                    {
+                        path: '/new-resource',
+                        component: lazy(() => import('./routes/dash/config/new'))
+                    },
+                    {
+                        path: '/:resource',
+                        component: lazy(() => import('./routes/dash/config/resource'))
+                    }
+                ]
             },
             {
                 path: "/actions",
                 component: lazy(() => import('./routes/dash/actions/mod'))
+            },
+            {
+                path: "/logs",
+                component: lazy(() => import('./routes/dash/logs/layout')),
+                children: [
+                    {
+                        path: '/*',
+                        component: lazy(() => import('./routes/dash/logs/mod'))
+                    }
+                ]
             },
             {
                 path: "/*",

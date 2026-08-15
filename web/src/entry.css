@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 
 @theme {
-    --color-ie: #20396E;
+    /* --color-ie: #20396E; */
+    --color-ie: #225cda; /* ie-vibrant */
     --default-font-family: "jetbrainsmono";
     --font-jetbrains: "jetbrainsmono";
 }

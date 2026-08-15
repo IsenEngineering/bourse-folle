@@ -43,7 +43,7 @@ export default function Nav() {
         <header class="mt-2 mr-2 mx-auto sm:mr-4 sm:mt-4 rounded-full h-auto sm:h-12 w-fit sm:w-2/3 lg:w-3/5 xl:w-2/5 
             p-1 bg-white/10 text-white sticky sm:relative top-0 backdrop-blur-xs z-30
             flex flex-row items-center justify-between gap-2">
-            <p class="bg-white/75 text-gray-800 ml-1 px-2 py-1 font-bold rounded-full hidden sm:block">
+            <p class="bg-white/75 text-black ml-1 px-2 py-1 font-bold rounded-full hidden sm:block">
                 https://bourse-folle.isenengineering.fr
             </p>
             {/* <nav class="flex flex-row flex-wrap sm:flex-nowrap items-center gap-0.5">

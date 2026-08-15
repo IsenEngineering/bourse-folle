@@ -1,0 +1,1 @@
+// logs per day that tracks service mode / configurations / actions / logs

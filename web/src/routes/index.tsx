@@ -1,15 +1,15 @@
 import Prix, { PRIX_PLACEHOLDER } from "../components/prix/mod"
-import Graph from "../components/graph/mod"
-import { createContext, JSX, onCleanup, onMount, Show } from "solid-js";
+import { createContext, JSX, lazy, onCleanup, onMount, Show } from "solid-js";
 import Resizable from "@corvu/resizable";
-import Shader from "../components/shader/mod"
 import { createStore, StoreReturn } from "solid-js/store";
 import Nav from "../components/nav/mod";
 
+const Shader = lazy(() => import('../components/shader/mod'))
+const Graph = lazy(() => import('../components/graph/mod'))
 const Main = (props: { graph: JSX.Element, prix: JSX.Element }) => {
     return <Show when={window.innerWidth > 900} fallback={<main class="h-full w-full gap-3 p-3 flex flex-col z-20">
         {/* affichage téléphone (colonne) */}
-        <section class="border-2 border-gray-700 rounded-lg overflow-hidden min-h-[40vh]">
+        <section id="main-graph" class="border-2 border-gray-700 rounded-lg overflow-hidden min-h-[40vh]">
             {props.graph}
         </section>
         <section class="border-2 border-gray-700 h-full rounded-lg overflow-hidden">
@@ -21,7 +21,7 @@ const Main = (props: { graph: JSX.Element, prix: JSX.Element }) => {
         flex flex-col md:flex-row" orientation="horizontal" as="main"
             initialSizes={[0.7, 0.3]}>
             <Resizable.Panel minSize="600px" class="border-2 border-gray-700 rounded-lg min-h-0
-                overflow-hidden bg-gray-700/25" as="section">
+                overflow-hidden bg-gray-700/25" as="section" id="main-graph">
                 {props.graph}
             </Resizable.Panel>
             <Resizable.Handle class="w-1"/>
@@ -43,8 +43,12 @@ export default () => {
                 const prix = Math.floor((r.prix + Math.random() * 20 - 10) * 100) / 100
                 return { 
                     ...r,
-                    variation: r.historique.length > 2 ? Math.floor((r.historique.at(0).prix - r.historique.at(-1).prix) * 100) / 100 : 0,
-                    historique: [...(r.historique.length > 30 ? r.historique.slice(1) : r.historique), { prix, ts: Date.now() }],
+                    variation: r.historique.length > 2 
+                        ? Math.floor((r.historique.at(0)!.prix - r.historique.at(-1)!.prix) * 100) / 100 
+                        : 0,
+                    historique: [...(r.historique.length > 30 
+                        ? r.historique.slice(1) 
+                        : r.historique), { prix, ts: Date.now() }],
                     prix
                 }
             }))

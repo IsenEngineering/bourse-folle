@@ -1,0 +1,3 @@
+export default () => <>
+    Paramètres globaux avec l'interval, les coefficients...
+</>

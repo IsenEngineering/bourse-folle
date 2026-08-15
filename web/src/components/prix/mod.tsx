@@ -4,10 +4,7 @@ import { RessourcesCtx } from "../../routes"
 
 export const PRIX_PLACEHOLDER = placeholder.ressources.map(r => ({
     ...r,
-    historique: r.historique.map((h, i) => ({
-        ...h,
-        ts: i * 1000000
-    }))
+    historique: [] as { prix: number, ts: number }[] 
 })) satisfies BourseFolle.Ressource[]
 
 export interface Props {
@@ -26,7 +23,7 @@ export const PerformancePolyline = ({ historique, variation }: PerformanceProps)
 
     const path = pts.map((point, i) => [
         ((i / (pts.length - 1)) * 150).toPrecision(4), 
-        ((point - min) / (max - min) * 25).toPrecision(4)
+        (25 - (point - min) / (max - min) * 25).toPrecision(4)
     ].join(',')).join(' ')
 
     return <svg viewBox={`0 0 150 25`} preserveAspectRatio="none" class="col-span-2 lg:col-span-3 w-full h-6">
@@ -38,9 +35,9 @@ export const PerformancePolyline = ({ historique, variation }: PerformanceProps)
 
 export default () => {
     const ctx = useContext(RessourcesCtx)
-    if(!ctx) return <section class="h-full w-full flex justify-center items-center 
+    if(!ctx) return <section class="h-full w-full flex justify-center items-center text-white 
         text-2xl font-black animate-pulse">
-        loading
+        <div class="w-10 h-10 border-4 border-white animate-spin"/>
     </section>
 
     const [ressources, _] = ctx
