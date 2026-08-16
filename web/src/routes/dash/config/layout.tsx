@@ -14,7 +14,7 @@ export default (props: Pick<ComponentProps<'section'>, 'children'>) => {
             },
             {
                 href: "/dash/config/new-resource",
-                children: <>Ajouter une boissons</>,
+                children: <>Ajouter une ressource</>,
                 isActive: () => location.pathname === "/dash/config/new-resource"
             },
             {

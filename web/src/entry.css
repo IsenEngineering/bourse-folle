@@ -11,3 +11,9 @@
     font-family: "jetbrainsmono";
     src: url(/JetBrainsMono.ttf);
 }
+
+@media (width < 1024px) {
+    div#root:has(.scrollable) {
+        height: unset;
+    }
+}

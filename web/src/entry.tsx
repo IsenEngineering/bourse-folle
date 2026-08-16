@@ -49,7 +49,11 @@ const routes = [
                 component: lazy(() => import('./routes/dash/logs/layout')),
                 children: [
                     {
-                        path: '/*',
+                        path: '/',
+                        component: lazy(() => import('./routes/dash/logs/empty'))
+                    },
+                    {
+                        path: '/:id',
                         component: lazy(() => import('./routes/dash/logs/mod'))
                     }
                 ]
