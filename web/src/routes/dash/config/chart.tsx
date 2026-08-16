@@ -51,17 +51,14 @@ function generationPoints(p: SimulationProps) {
 
     const generation = (demande: () => number) => {
         const points: { prix: number, t: number }[] = new Array(nb).fill({ prix: 0, t: 0 })
-        for(let i = 0; i < nb; i++) {
-            const prix_precedent = i === 0 ? p.prix.initial : points[i - 1].prix
-            
-            points[i] = {
-                prix: u({
-                    ...p,
-                    demande: demande(),
-                    prix_precedent
-                }),
-                t: i * p.interval()
-            }
+        points[0] = { prix: p.prix.initial, t: 0 }
+        for(let i = 1; i < nb; i++) points[i] = {
+            prix: u({
+                ...p,
+                demande: demande(),
+                prix_precedent: points[i - 1].prix
+            }),
+            t: i * p.interval()
         }
 
         return points

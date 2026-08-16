@@ -1,30 +1,33 @@
-// export default () => {
-//     return <p class="text-white p-3">
-//         Le serveur peut cliquer sur les boissons lorsqu'une boisson est servie,<br/> 
-//         On affiche le nombre de boissons commandés + son prix actuel avec une courbe de performance
-//         <br/>
-//         <br/>
-//         Il y a aussi des boutons pour annuler
-//     </p>
-// }
-
 import Resizable from "@corvu/resizable";
-import { createSignal, onMount } from "solid-js";
+import { createSignal, useContext } from "solid-js";
+import { DashLayoutCtx } from "../layout";
 
 export default () => {
+    const [service, setService] = createSignal(false)
     const [aide, setAide] = createSignal(localStorage.getItem('aide') !== '0')
+    const [_, setDashDisplay] = useContext(DashLayoutCtx)!
 
     return <Resizable class="text-white font-jetbrains h-full w-full overflow-y-auto sm:overflow-hidden" 
         orientation={ window.innerWidth < 640 ? 'vertical' : 'horizontal'} as="main"
         initialSizes={[0.1, 0.9]}>
         <Resizable.Panel collapsible={true} data-collapsed class="p-3 border-r border-ie h-full" as="section">
             <div class="hover:bg-ie/50 transition-colors uppercase font-bold select-none cursor-pointer
-                bg-white/10 text-white px-2 py-1 text-xs md:text-base md:px-4 md:py-2 mb-3" 
-                draggable={false}>
-                Service inactif
+                bg-white/10 text-white text-base px-4 py-2 mb-3" 
+                draggable={false}
+                style={service() ? 'background: var(--color-ie)' : ''}
+                onClick={() => {
+                    const callback = () => {
+                        setService(!service())
+                        setDashDisplay(!service())
+                    }
+
+                    if(!document.startViewTransition) callback()
+                    else document.startViewTransition(callback) 
+                }}>
+                Service { service() ? 'actif' : 'inactif' }
             </div>
             <div class="hover:bg-white/25 transition-colors uppercase font-bold select-none cursor-pointer
-                bg-white/10 text-white px-2 py-1 text-xs md:text-base md:px-4 md:py-2 mb-3" 
+                bg-white/10 text-white text-base px-4 py-2 mb-3" 
                 draggable={false}>
                 Annuler la dernière action
             </div>

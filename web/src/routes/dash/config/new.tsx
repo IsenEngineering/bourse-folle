@@ -52,7 +52,7 @@ export default () => {
                 <input
                     type="number"
                     min={0}
-                    step={0.01}
+                    step={0.1}
                     value={price.initial}
                     onInput={e => setPrice('initial', parseFloat(e.currentTarget.value))}
                     class="bg-transparent border border-ie px-3 py-2 focus:outline-none focus:bg-ie/20"
@@ -63,7 +63,7 @@ export default () => {
                         <input
                             type="number"
                             min={0}
-                            step={0.01}
+                            step={0.1}
                             value={price.max}
                             onInput={e => setPrice('max', parseFloat(e.currentTarget.value))}
                             class="bg-transparent text-sm w-full border border-ie px-2 py-1 focus:outline-none focus:bg-ie/20"
@@ -74,7 +74,7 @@ export default () => {
                         <input
                             type="number"
                             min={0}
-                            step={0.01}
+                            step={0.1}
                             value={price.min}
                             onInput={e => setPrice('min', parseFloat(e.currentTarget.value))}
                             class="bg-transparent text-sm w-full border border-ie px-2 py-1 focus:outline-none focus:bg-ie/20"
