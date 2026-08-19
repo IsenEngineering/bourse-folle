@@ -4,9 +4,10 @@
 // une ressource est composée de
 //  - un nom
 //  - un identifiant
-//  - un prix
-//  - demande (nb d'achats pour l'évènements)
+//  - un prix (initial, minimum et maximum)
 //  - une variation (sur un nombre déterminé d'interval)
 //  - historique (les prix précédents avec des timestamps)
 //  - coefficents (détermine le comportement du prix de la ressource 
 //      en fonction du temps et de la demande)
+//      - volatilite (descente)
+//      - force (monte)

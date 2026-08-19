@@ -110,14 +110,14 @@ export default (props: SimulationProps) => {
                     stroke: "rgb(255, 255, 255)",
                 }),
                 lineY(points.demande_superieur, {
-                    id: "Demande supérieur",
+                    id: "Demande élevée",
                     x: 't',
                     y: 'prix',
                     points: window.innerWidth > 900,
                     stroke: "rgb(200, 55, 55)",
                 }),
                 lineY(points.demande_inferieur, {
-                    id: "Demande inférieur",
+                    id: "Demande faible",
                     x: 't',
                     y: 'prix',
                     points: window.innerWidth > 900,

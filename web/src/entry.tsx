@@ -57,16 +57,13 @@ const routes = [
                         component: lazy(() => import('./routes/dash/logs/mod'))
                     }
                 ]
-            },
-            {
-                path: "/*",
-                component: lazy(() => import('./routes/dash/index')),
             }
         ]
     }
 ] as RouteDefinition[]
 
 const root = document.getElementById('root');
+
 render(() => <Router>
     {routes}
 </Router>, root!);
