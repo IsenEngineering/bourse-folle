@@ -6,10 +6,10 @@ mod service;
 // - /api/service/actif -> upgrade en websocket pour passer les commandes (permet de tracker l'utilisation du service,
 //      lorsque la connexion est interrompue on sait que le service est fini pour la personne/ au pire il redémarre)
 
-mod config;
+pub mod config;
 // - /api/config [GET,PATCH] -> modifier les paramètres globaux
 
-mod resources;
+pub mod resources;
 // - /api/resources [GET,POST,PATCH,DELETE] -> récupérer/créer/modifier/supprimer une ressource
 
 mod logs;

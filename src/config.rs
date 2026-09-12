@@ -3,13 +3,13 @@ use std::{path::PathBuf, time::Duration};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum EventState {
     Stopped,
     Running,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
     pub interval: Duration, // configurer l'interval des mises à jour des ressources
     pub event_id: String, // le numéro/identifiant de l'évènement (pour différencier une sauvegarde d'une autre)

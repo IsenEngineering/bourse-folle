@@ -1,13 +1,14 @@
 declare namespace BourseFolle {
-    export interface Ressource {
-        nom: string,
-        code: string,
-        prix: number,
-        couleur: string,
-        variation: number
-        historique: {
-            prix: number
-            ts: number,
-        }[]
-    }
-} 
+	interface Resource {
+		name: string,
+	    id: String,
+	    price: number,
+	    price_initial: number,
+	    price_min: number,
+	    price_max: number,
+	    var: number,
+	    historic: number[],
+	    coef_volatility: number,
+	    coef_strength: number,
+	}
+}

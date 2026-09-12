@@ -8,6 +8,7 @@ use axum::{
 use axum_extra::extract::CookieJar;
 
 #[derive(Clone, Debug)]
+#[allow(unused)]
 pub struct Authentificated {
     pub email: String,
 }

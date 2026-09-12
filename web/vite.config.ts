@@ -10,8 +10,5 @@ export default defineConfig({
     },
     build: {
         target: 'esnext',
-    },
-    resolve: {
-        tsconfigPaths: true
     }
 });

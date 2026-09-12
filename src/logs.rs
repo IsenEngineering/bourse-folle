@@ -15,8 +15,10 @@ use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
 };
 
+#[allow(unused)]
 pub struct ServiceLogs;
 
+#[allow(unused)]
 impl ServiceLogs {
     pub async fn log(user: &str, msg: &str) -> Result<()> {
         let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();

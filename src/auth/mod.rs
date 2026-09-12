@@ -2,6 +2,7 @@ mod middlewares;
 mod oidc;
 mod session;
 
+#[allow(unused)]
 pub use middlewares::Authentificated;
 pub use middlewares::check_authentification;
 pub use oidc::OidcClient;
