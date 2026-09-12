@@ -2,19 +2,9 @@ import { useNavigate } from "@solidjs/router";
 import { createMemo, createResource } from "solid-js";
 import { createStore } from "solid-js/store";
 
-interface Config {
-	interval: {
-		secs: number,
-        nanos: number
-	},
-    event_id: string,
-    event_state: "Stopped" | "Running",
-    expected_drinks: number,
-}
-
 export default () => {
 	const nav = useNavigate()
-	const [buffer, setBuffer] = createStore<Partial<Config>>({})
+	const [buffer, setBuffer] = createStore<Partial<BourseFolle.Config>>({})
 	const changes = createMemo(() => {
 		// computes what fields are ready to update
 		const event_id = buffer.event_id !== undefined
@@ -47,7 +37,7 @@ export default () => {
 		}
 		const config = await response.json()
 
-		return config as Config
+		return config as BourseFolle.Config
 	})
 
 	const update = async () => {

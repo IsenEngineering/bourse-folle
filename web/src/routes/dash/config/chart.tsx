@@ -42,8 +42,8 @@ const u = (p: SimulationProps & { prix_precedent: number, demande: number }) => 
 
     return Math.max(p.prix.min, Math.min(p.prix.max, prix));
 }
-   
-// const f = (t: number, demande: number, p0: number, force: number, volatilite: number) => 
+
+// const f = (t: number, demande: number, p0: number, force: number, volatilite: number) =>
 //     p0 * Math.exp(force * demande - volatilite * t)
 
 function generationPoints(p: SimulationProps) {
@@ -65,31 +65,31 @@ function generationPoints(p: SimulationProps) {
     }
 
     return {
-        demande_aleatoire: generation(() => Math.random()),
-        demande_superieur: generation(() => 0.66 + Math.random() * 0.33),
-        demande_inferieur: generation(() => Math.random() * 0.33),
         demande_constante: generation(() => 1),
+        demande_superieur: generation(() => 0.66 + Math.random() * 0.33),
+        demande_aleatoire: generation(() => Math.random()),
+        demande_inferieur: generation(() => Math.random() * 0.33),
         demande_nulle: generation(() => 0)
     }
 }
 
 export default (props: SimulationProps) => {
     const [height, setHeight] = createSignal(320)
-    
+
     onMount(() => {
         const parent = document.getElementById('simulation-graph') as HTMLElement
         if(!parent) return
         setHeight(parent.getBoundingClientRect().height || 320)
-        
+
         const resizeObserver = new ResizeObserver(entries => entries.forEach(entry => {
             if(entry.target.id != 'simulation-graph') return
-            
+
             setHeight(entry.contentRect.height)
         }))
-        
+
         resizeObserver.observe(parent)
     })
-    
+
     const data = createMemo(() => {
         const points = generationPoints(props)
         return defineChart({
@@ -97,7 +97,7 @@ export default (props: SimulationProps) => {
                 use: tooltip,
                 ...{
                     format(point) {
-                        return `${point.groupLabel} ${Math.ceil(point.yValue * 100) / 100}€`   
+                        return `${point.groupLabel} ${Math.ceil(point.yValue * 100) / 100}€`
                     }
                 }
             },

@@ -9,6 +9,27 @@ declare namespace BourseFolle {
 	    var: number,
 	    historic: number[],
 	    coef_volatility: number,
-	    coef_strength: number,
+		coef_strength: number,
+		demande: number
+	}
+
+	interface Config {
+		// serde serialization of std::time::Duration
+		interval: {
+			secs: number,
+	        nanos: number
+		},
+	    event_id: string,
+	    event_state: "Stopped" | "Running",
+	    expected_drinks: number,
+	}
+
+	 interface SessionData {
+		sub: string,
+	    email: string,
+	    name?: string,
+	    picture?: string,
+
+	    expires_at?: number,
 	}
 }

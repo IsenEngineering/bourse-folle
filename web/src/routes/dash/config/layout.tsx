@@ -2,11 +2,13 @@ import { useLocation, useNavigate } from "@solidjs/router"
 import { ComponentProps, createContext, createMemo, createResource } from "solid-js"
 import LayoutMenu from "../../../components/layouts/menu"
 
-export const RefreshLayoutCtx = createContext<(info?: unknown) =>
-	Record<string, BourseFolle.Resource> |
-	Promise<Record<string, BourseFolle.Resource> | undefined>
-	| null
-	| undefined>()
+export const RefreshLayoutCtx = createContext<{
+	refetch: (info?: unknown) =>
+		Record<string, BourseFolle.Resource> |
+		Promise<Record<string, BourseFolle.Resource> | undefined>
+		| null
+		| undefined
+}>()
 
 export default (props: Pick<ComponentProps<'section'>, 'children'>) => {
 	const location = useLocation()
@@ -43,7 +45,7 @@ export default (props: Pick<ComponentProps<'section'>, 'children'>) => {
 		}))
 	]))
 
-	return <RefreshLayoutCtx.Provider value={refetch}>
+	return <RefreshLayoutCtx.Provider value={{ refetch }}>
 		<LayoutMenu
 	        items={items}>
 	        {props.children}

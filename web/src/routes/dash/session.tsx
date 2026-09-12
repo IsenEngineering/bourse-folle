@@ -1,15 +1,6 @@
 import { useNavigate } from "@solidjs/router"
 import { createContext, createResource, ParentProps, Resource, Show, useContext } from "solid-js"
 
-interface SessionData {
-	sub: string,
-    email: string,
-    name?: string,
-    picture?: string,
-
-    expires_at?: number,
-}
-
 export const Profile = () => {
 	const session = useContext(SessionCtx)
 	return <Show when={session && session() !== undefined && session()!.picture}
@@ -22,13 +13,13 @@ export const Profile = () => {
 }
 
 const SESSION_TTL = 1000 * 60 * 2.5 // ms
-export const SessionCtx = createContext<Resource<SessionData>>()
+export const SessionCtx = createContext<Resource<BourseFolle.SessionData>>()
 export const SessionProvider = (props: ParentProps) => {
 	const nav = useNavigate()
 	const [session] = createResource(async () => {
 		const cache = sessionStorage.getItem("whoami")
 		if (cache !== null) {
-			const [t, data] = JSON.parse(cache) as [number, SessionData]
+			const [t, data] = JSON.parse(cache) as [number, BourseFolle.SessionData]
 			if (t + SESSION_TTL >= Date.now()) {
 				return data
 			}
@@ -39,7 +30,7 @@ export const SessionProvider = (props: ParentProps) => {
 		})
 
 		if (response.status === 200) {
-			const data: SessionData = await response.json()
+			const data: BourseFolle.SessionData = await response.json()
 			sessionStorage.setItem("whoami", JSON.stringify([Date.now(), data]))
 
 			return data

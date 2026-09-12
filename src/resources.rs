@@ -47,6 +47,7 @@ pub struct Resource {
     pub price_max: f32,
     pub var: f32,
     pub historic: Vec<f32>,
+    pub demande: usize,
     pub coef_volatility: f32,
     pub coef_strength: f32,
 }

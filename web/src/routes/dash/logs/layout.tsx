@@ -6,7 +6,7 @@ export default (props: Pick<ComponentProps<'section'>, 'children'>) => {
     const location = useLocation()
 
     return <LayoutMenu
-        items={[
+        items={() => [
             {
                 href: "/dash/logs/1",
                 children: <>Ajouter une boissons</>,

@@ -1,7 +1,7 @@
 mod live;
 // - /api/live -> stream les ressources à interval régulié
 
-mod service;
+pub mod service;
 // - /api/service/logs -> stream les logs concernant le service (qui prends un service / qui s'occupe d'appuyer sur les boissons)
 // - /api/service/actif -> upgrade en websocket pour passer les commandes (permet de tracker l'utilisation du service,
 //      lorsque la connexion est interrompue on sait que le service est fini pour la personne/ au pire il redémarre)

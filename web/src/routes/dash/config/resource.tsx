@@ -65,7 +65,7 @@ export default () => {
 			console.error(`PATCH /api/resources/${resource_id}`,
 				response.status, response.statusText, JSON.stringify(body, undefined, 4), error)
 		} else {
-			if(refresh_layout) await refresh_layout()
+			if(refresh_layout) await refresh_layout.refetch()
 			refetch()
 			setBuffer('name', undefined)
 			setBuffer('price_initial', undefined)
@@ -85,7 +85,7 @@ export default () => {
 		if (response.status !== 200) {
 			console.error(`DELETE /api/resources/${resource_id}`, response.status, response.statusText)
 		} else {
-			if(refresh_layout) await refresh_layout()
+			if(refresh_layout) await refresh_layout.refetch()
 			nav("/dash/config/new-resource")
 		}
 	}

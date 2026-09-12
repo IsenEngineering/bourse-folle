@@ -27,17 +27,18 @@ export default () => {
 		if (!ready().ready) return console.error("Not ready yet")
 
 		const body = {
-			name: resource.name,
-		    id: resource.id,
-		    price: resource.price_initial,
-		    price_initial: resource.price_initial,
-		    price_min: resource.price_min,
-		    price_max: resource.price_max,
+			name: resource.name!,
+		    id: resource.id!,
+		    price: resource.price_initial!,
+		    price_initial: resource.price_initial!,
+		    price_min: resource.price_min!,
+		    price_max: resource.price_max!,
 		    var: 0,
 		    historic: [],
-		    coef_volatility: resource.coef_volatility,
-		    coef_strength: resource.coef_strength,
-		}
+		    coef_volatility: resource.coef_volatility!,
+			coef_strength: resource.coef_strength!,
+			demande: 0
+		} satisfies BourseFolle.Resource
 
 		const response = await fetch("/api/resources", {
 			method: "POST",
@@ -47,7 +48,7 @@ export default () => {
 		})
 
 		if (response.ok) {
-			if(refresh_layout) await refresh_layout()
+			if(refresh_layout) await refresh_layout.refetch()
 			nav(`/dash/config/${resource.id}`)
 		}
 		else console.error("POST /api/resources", response.status, response.statusText, JSON.stringify(body, undefined, 4))
