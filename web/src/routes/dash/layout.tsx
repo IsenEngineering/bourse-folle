@@ -31,12 +31,12 @@ export default (props: ComponentProps<'nav'>) => {
 	                        draggable={false}>
 	                        Actions
 	                    </a>
-	                    <a href="/dash/logs" style={location.pathname.startsWith("/dash/logs") ? 'background: var(--color-ie);' : ''}
+	                    {/*<a href="/dash/logs" style={location.pathname.startsWith("/dash/logs") ? 'background: var(--color-ie);' : ''}
 	                        class="hover:bg-ie/50 transition-colors uppercase font-bold select-none
 	                        bg-white/10 text-white px-2 py-1 text-xs md:text-base md:px-4 md:py-2"
 	                        draggable={false}>
 	                        Logs
-	                    </a>
+	                    </a>*/}
 	                    <a href="/dash/debug" style={location.pathname === "/dash/debug" ? 'background: var(--color-ie);' : ''}
 	                        class="hover:bg-ie/50 transition-colors uppercase font-bold select-none
 	                        bg-white/10 text-white px-2 py-1 text-xs md:text-base md:px-4 md:py-2"

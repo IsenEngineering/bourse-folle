@@ -3,13 +3,10 @@ import { createSignal, For, Setter, useContext } from "solid-js";
 import { DashLayoutCtx } from "../layout";
 
 type Resource = { name: string, id: string, price: number, demande: number }
-type MsgOutResources = {
-	"Resources": Resource[]
-}
-type MsgOutLog = {
-	"Log": string
-}
-type MsgOut = MsgOutLog | MsgOutResources
+type MsgOutResources = { "Resources": Resource[] }
+type MsgOutResource = { "Resource": Resource }
+type MsgOutLog = { "Log": string }
+type MsgOut = MsgOutLog | MsgOutResources | MsgOutResource
 
 const setupSocket = (setLogs: Setter<string>, setResources: Setter<Resource[]>) => {
 	const url = new URL("/api/service", location.origin)
@@ -24,8 +21,12 @@ const setupSocket = (setLogs: Setter<string>, setResources: Setter<Resource[]>) 
 		if ('Resources' in data) {
 			setResources(data.Resources)
 		}
+		if ('Resource' in data) {
+			setResources(e => e.map(res => res.id === data.Resource.id
+				? data.Resource : res))
+		}
 		if ('Log' in data) {
-			setLogs(data.Log)
+			setLogs(logs => logs + '\n' + data.Log)
 		}
 	})
 	socket.addEventListener("error", console.error)
@@ -43,7 +44,7 @@ export default () => {
     return <Resizable class="text-white font-jetbrains h-full w-full overflow-y-auto sm:overflow-hidden"
         orientation={ window.innerWidth < 640 ? 'vertical' : 'horizontal'} as="main"
         initialSizes={[0.1, 0.9]}>
-        <Resizable.Panel collapsible={true} data-collapsed class="p-3 border-r border-ie h-full" as="section">
+        <Resizable.Panel collapsible={true} class="p-3 border-r border-ie h-full flex flex-col" as="section">
             <div class="hover:bg-ie/50 transition-colors uppercase font-bold select-none cursor-pointer
                 bg-white/10 text-white text-base px-4 py-2 mb-3"
                 draggable={false}
@@ -53,7 +54,11 @@ export default () => {
 						if (ws() === null) {
 							const socket = setupSocket(setLogs, setResources)
 							setWs(socket)
-						} else setWs(null)
+						} else {
+							setWs(null)
+							setLogs("")
+							setResources([])
+						}
 
                         setDashDisplay(ws() === null)
                     }
@@ -63,21 +68,18 @@ export default () => {
                 }}>
                 Service { ws() !== null ? 'actif' : 'inactif' }
             </div>
-            <div class="hover:bg-white/25 transition-colors uppercase font-bold select-none cursor-pointer
-                bg-white/10 text-white text-base px-4 py-2 mb-3"
-				draggable={false} onClick={() => {
-					ws()?.send(JSON.stringify("Undo"))
-                }}>
-                Annuler la dernière action
+			<div class="overflow-hidden min-w-64 max-w-md flex-1 h-full hidden sm:block relative">
+				<div class="h-16 w-full absolute top-0 left-0 bg-linear-0
+					to-black from-transparent z-20"/>
+				<pre class="truncate w-full bottom-0 left-0 absolute z-10 mb-auto">
+					<For each={logs().split('\n')}>
+						{log => log.length === 0 ? null : <>
+							<span>{log}</span>
+							<br/>
+						</>}
+					</For>
+	            </pre>
             </div>
-			<pre class="truncate overflow-x-hidden overflow-y-auto hidden sm:block">
-				<For each={logs().split('\n')}>
-					{log => <>
-						<span>{log}</span>
-						<br/>
-					</>}
-				</For>
-            </pre>
             {/* historique + mode service + reverse */}
         </Resizable.Panel>
         <Resizable.Handle class="w-1"/>
@@ -107,9 +109,14 @@ export default () => {
 	                px-2 py-1  md:px-4 md:py-2 min-h-16
 	                flex flex-col gap-0.5 h-full w-full justify-center items-center"
 					draggable={false}
-					onClick={() => ws()?.send(JSON.stringify({
-						"Demande": resource.id
-					}))}
+					onClick={(e) => {
+
+						ws()?.send(JSON.stringify(
+							e.shiftKey
+								? { "Decrease": resource.id }
+								: { "Increase": resource.id }
+						))
+					}}
 	                title="Suspension de la mise à jour du prix des boissons">
 	                <p class="truncate">{ resource.name }</p>
 					<p class="text-white/50 italic font-light">{resource.price}€ - {resource.demande}</p>

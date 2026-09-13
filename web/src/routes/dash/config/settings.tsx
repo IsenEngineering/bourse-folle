@@ -7,8 +7,8 @@ export default () => {
 	const [buffer, setBuffer] = createStore<Partial<BourseFolle.Config>>({})
 	const changes = createMemo(() => {
 		// computes what fields are ready to update
-		const event_id = buffer.event_id !== undefined
-			&& buffer.event_id !== config()?.event_id
+		// const event_id = buffer.event_id !== undefined
+		// 	&& buffer.event_id !== config()?.event_id
 		const expected_drinks = buffer.expected_drinks !== undefined
 			&& buffer.expected_drinks !== config()?.expected_drinks && buffer.expected_drinks > 0
 		const interval = buffer.interval !== undefined
@@ -17,12 +17,12 @@ export default () => {
 			&& buffer.event_state !== config()?.event_state
 
 		return {
-			event_id,
+			// event_id,
 			expected_drinks,
 			interval,
 			event_state,
 			// if any field changed
-			any: event_id || interval || expected_drinks || event_state
+			any: interval || expected_drinks || event_state
 		}
 	})
 
@@ -45,7 +45,7 @@ export default () => {
 
 		const body = {
 			interval: changes().interval ? buffer.interval : undefined,
-			event_id: changes().event_id ? buffer.event_id : undefined,
+			// event_id: changes().event_id ? buffer.event_id : undefined,
 			event_state: changes().event_state ? buffer.event_state : undefined,
 			expected_drinks: changes().expected_drinks ? buffer.expected_drinks : undefined,
 		}
@@ -59,7 +59,7 @@ export default () => {
 
 		if (response.ok) {
 			refetch()
-			setBuffer('event_id', undefined)
+			// setBuffer('event_id', undefined)
 			setBuffer('event_state', undefined)
 			setBuffer('expected_drinks', undefined)
 			setBuffer('interval', undefined)
@@ -104,7 +104,7 @@ export default () => {
                 />
             </label>
 
-            <label class="flex flex-col gap-1">
+            {/*<label class="flex flex-col gap-1">
                 <span class="uppercase text-sm">Identifiant de l'évènement</span>
                 <span class="text-white/50 text-xs">
                     ⚠️ Changer cet identifiant revient à changer de sauvegarde : les boissons seront réinitialisées en cas de nouvel identifiant.
@@ -117,7 +117,7 @@ export default () => {
                     placeholder="ex: saison-2026-hiver"
                     class="bg-transparent border border-ie px-3 py-2 focus:outline-none focus:bg-ie/20"
                 />
-            </label>
+            </label>*/}
             <label class="flex flex-col gap-1">
 				<span class="uppercase text-sm">Etat de l'évènement</span>
 				<div class="flex flex-row gap-1">
@@ -147,8 +147,8 @@ export default () => {
             <div class="flex flex-col gap-1">
                 <span class="uppercase text-sm">Changements</span>
 				<p class="text-white/50 text-xs">
-					{changes().event_id
-						&& <>- ⚠️ changement de sauvegarde -&gt {buffer.event_id}<br /></>}
+					{/*{changes().event_id
+						&& <>- ⚠️ changement de sauvegarde -&gt {buffer.event_id}<br /></>}*/}
 					{changes().interval
 						&& <>- interval -&gt {Math.round(buffer.interval!.secs / 60)}<br /></>}
 					{changes().expected_drinks

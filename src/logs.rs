@@ -3,11 +3,7 @@
 // fonction qui écrit sur disque et broadcast les logs
 // fonction qui lit les derniers logs
 
-use std::{
-    collections::VecDeque,
-    path::PathBuf,
-    time::{SystemTime, UNIX_EPOCH},
-};
+use std::{collections::VecDeque, path::PathBuf};
 
 use anyhow::Result;
 use tokio::{
@@ -18,12 +14,9 @@ use tokio::{
 pub struct ServiceLogs;
 
 impl ServiceLogs {
-    pub async fn log(user: &str, msg: &str) -> Result<()> {
-        let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
-        let secs_today = now % 60 * 60 * 24;
-        let hours = secs_today / 3600;
-        let minutes = (secs_today % 3600) / 60;
-        let content = format!("{:02}:{:02} {} ({})", hours, minutes, msg, user);
+    pub async fn log(msg: &str) -> Result<String> {
+        let time = time::UtcDateTime::now();
+        let content = format!("{:02}:{:02} {}", time.hour() + 2, time.minute(), msg);
 
         let data_path = std::env::var("DATASTORE_PATH").unwrap_or("./data".to_string());
         let logs_path = PathBuf::from(data_path).join("logs/services.txt");
@@ -37,7 +30,7 @@ impl ServiceLogs {
         file.write_all(content.as_bytes()).await?;
         file.write_all(b"\n").await?;
 
-        Ok(())
+        Ok(content)
     }
     pub async fn read(n: u32) -> Result<String> {
         let data_path = std::env::var("DATASTORE_PATH").unwrap_or("./data".to_string());

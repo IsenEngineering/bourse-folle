@@ -23,14 +23,18 @@ impl ResourcePool {
         let mut entries = tokio::fs::read_dir(&resources_path).await?;
         while let Ok(Some(entry)) = entries.next_entry().await {
             let path = entry.path();
-            if !path.ends_with(".json") {
-                continue;
+
+            let content = tokio::fs::read_to_string(path)
+                .await
+                .and_then(|content| Ok(serde_json::from_str::<Resource>(&content)));
+
+            match content {
+                Ok(Ok(resource)) => {
+                    resources.insert(resource.id.clone(), resource);
+                }
+                Ok(Err(_e)) => {}
+                Err(_e) => {}
             }
-
-            let content = tokio::fs::read(path).await?;
-            let resource: Resource = serde_json::from_slice(&content)?;
-
-            resources.insert(resource.id.clone(), resource);
         }
 
         Ok(Self(Arc::new(RwLock::new(resources))))
