@@ -10,7 +10,7 @@ type MsgOut = MsgOutLog | MsgOutResources | MsgOutResource
 
 const setupSocket = (setLogs: Setter<string>, setResources: Setter<Resource[]>) => {
 	const url = new URL("/api/service", location.origin)
-	url.protocol = "ws"
+	url.protocol = location.protocol === "https:" ? "wss" : 'ws'
 
 	const socket = new WebSocket(url)
 	socket.addEventListener("open", console.info)

@@ -39,8 +39,12 @@ async fn main() -> Result<()> {
     let state = Shared {
         config: Arc::new(RwLock::new(config::Config::new().await?)),
         resources: resources::ResourcePool::new().await?,
-        oidc: auth::OidcClient::new(client_id, client_secret, "http://localhost/auth/verify")
-            .await?,
+        oidc: auth::OidcClient::new(
+            client_id,
+            client_secret,
+            "https://bourse-folle.isenengineering.fr/auth/verify",
+        )
+        .await?,
         tx_resources,
         tx_service,
     };

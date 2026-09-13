@@ -14,7 +14,6 @@ impl OidcClient {
     /// configure un nouveau client en découvrant les métadonnées OIDC de Google.
     pub async fn new(client_id: String, client_secret: String, redirect_url: &str) -> Result<Self> {
         // vérification du lien de redirection.
-        let _ = Url::parse(redirect_url)?;
         let issuer = Url::parse(GOOGLE_OIDC_ISSUER)?;
 
         // découverte de la configuration de l'autorité.

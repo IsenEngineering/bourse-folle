@@ -28,6 +28,6 @@ pub(super) fn set(session: String) -> CookieJar {
 
     cookie.set_http_only(true);
     cookie.set_path("/");
-    cookie.set_same_site(SameSite::Strict);
+    cookie.set_same_site(SameSite::None);
     cookies.add(cookie)
 }
