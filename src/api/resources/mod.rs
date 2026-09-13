@@ -5,10 +5,11 @@ use axum::{
     Json, Router,
     extract::{Path, State},
     http::StatusCode,
-    routing::{get, post},
+    routing::{get, patch, post},
 };
 
 mod get;
+mod reset;
 mod update;
 pub use get::list_resources;
 
@@ -20,6 +21,7 @@ pub fn routes(shared: Shared) -> Router<Shared> {
                 .delete(delete_resource)
                 .patch(update::update_resource),
         )
+        .route("/reset", patch(reset::reset_resource))
         .route("/", post(create_resource).patch(update::update_resource))
         .with_state(shared)
 }

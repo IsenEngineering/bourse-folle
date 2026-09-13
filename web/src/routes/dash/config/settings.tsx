@@ -73,7 +73,7 @@ export default () => {
             <label class="flex flex-col gap-1">
                 <span class="uppercase text-sm">Interval des mises à jour</span>
                 <span class="text-white/50 text-xs">
-                    Fréquence (en minutes) à laquelle les ressources sont recalculées et mises à jour.
+                    Fréquence (en minutes) à laquelle les ressources sont recalculées et mises à jour. La demande est réinitialisée à chaque intervale.
                 </span>
                 <input
                     type="number"
@@ -89,11 +89,11 @@ export default () => {
             <label class="flex flex-col gap-1">
                 <span class="uppercase text-sm">Consommations attendues</span>
                 <span class="text-white/50 text-xs">
-                    Le nombre de consommations attendues permet au système d'avoir une référence pour tous les calculs.
+                    Le nombre de consommations attendues maximum permet au système d'avoir une référence d'une "forte consommation" pour tous les calculs.
                 </span>
                 <span class="text-xs text-white/25">
-                    les variations de 10 consommations pour 5000 personnes seront moins importantes
-                    que 1 consommation pour 10 personnes
+					l'augmentation maximum du prix est atteinte lorsqu'une ressource est demandée {buffer.expected_drinks || config()?.expected_drinks || 50}.
+					Si la ressource est demandée est de { Math.floor((buffer.expected_drinks || config()?.expected_drinks || 50) / 2)} l'augmentation sera ~50% moins forte
                 </span>
                 <input
                     type="number"

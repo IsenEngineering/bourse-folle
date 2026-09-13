@@ -43,8 +43,9 @@ export default () => {
 
     return <Resizable class="text-white font-jetbrains h-full w-full overflow-y-auto sm:overflow-hidden"
         orientation={ window.innerWidth < 640 ? 'vertical' : 'horizontal'} as="main"
-        initialSizes={[0.1, 0.9]}>
-        <Resizable.Panel collapsible={true} class="p-3 border-r border-ie h-full flex flex-col" as="section">
+        initialSizes={window.innerWidth < 640 ? undefined : [0.2, 0.8]}>
+		<Resizable.Panel collapsible={true} style={window.innerWidth < 640 ? 'flex-basis: 0' : ''}
+			class="p-3 border-r border-ie h-full flex flex-col" as="section">
             <div class="hover:bg-ie/50 transition-colors uppercase font-bold select-none cursor-pointer
                 bg-white/10 text-white text-base px-4 py-2 mb-3"
                 draggable={false}
@@ -110,12 +111,21 @@ export default () => {
 	                flex flex-col gap-0.5 h-full w-full justify-center items-center"
 					draggable={false}
 					onClick={(e) => {
+						try {
+							const socket = ws()
+							const shift = e.shiftKey
+							console.log(socket, shift)
+							if (socket !== null && socket.OPEN) {
+								const body = shift
+									? { "Decrease": resource.id }
+									: { "Increase": resource.id }
 
-						ws()?.send(JSON.stringify(
-							e.shiftKey
-								? { "Decrease": resource.id }
-								: { "Increase": resource.id }
-						))
+								console.log(body, shift)
+								socket.send(JSON.stringify(body))
+							}
+						} catch (e) {
+							console.error(e)
+						}
 					}}
 	                title="Suspension de la mise à jour du prix des boissons">
 	                <p class="truncate">{ resource.name }</p>

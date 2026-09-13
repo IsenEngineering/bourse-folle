@@ -9,7 +9,7 @@ export default () => {
 	const params = useParams()
 	const nav = useNavigate()
 	const [buffer, setBuffer] = createStore<Exclude<Partial<BourseFolle.Resource>, "id" | "var" | "historic">>()
-	const [resource, { refetch }] = createResource(async () => {
+	const [resource, { refetch }] = createResource(() => params.resource, async () => {
 		const resource_id = params.resource
 
 		const response = await fetch(`/api/resources/${resource_id}`, {
@@ -91,7 +91,7 @@ export default () => {
 	}
 
     return <section class="scrollable h-full w-full flex flex-col lg:flex-row text-white">
-        <div class="p-6 flex flex-col gap-5 max-w-md shrink-0 overflow-y-auto">
+		<div class="p-6 flex flex-col gap-5 max-w-md shrink-0 overflow-y-auto">
 			<h2 class="text-xl uppercase">Modifier {resource()?.name}</h2>
 
             <label class="flex flex-col gap-1">

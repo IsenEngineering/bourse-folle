@@ -114,7 +114,9 @@ pub async fn handle(email: String, shared: Shared, ws: WebSocket) {
                 Ok(MsgIn::Decrease(resource_id)) => {
                     let mut resources = shared.resources.write().await;
                     if let Some(resource) = resources.get_mut(&resource_id) {
-                        // increases demande
+                        if resource.demande == 0 {
+                            continue;
+                        }
                         resource.demande -= 1;
                         let _ = resource.write().await;
 

@@ -3,6 +3,7 @@ import Chart from './chart';
 import { createStore } from 'solid-js/store';
 import { useNavigate } from '@solidjs/router';
 import { RefreshLayoutCtx } from './layout';
+import resourceColor from '../../../components/resource-color';
 
 export default () => {
 	const nav = useNavigate()
@@ -77,7 +78,8 @@ export default () => {
                     type="text" data-ready={ready().id}
 					onInput={e => setResource("id", e.currentTarget.value
 						.trim().toUpperCase().slice(0, 16))}
-                    placeholder="ex: COCA01"
+					placeholder="ex: COCA01"
+                    style={`color: ${resourceColor(resource.id || '')}`}
 					class="bg-transparent border px-3 py-2 uppercase focus:outline-none
                     	focus:bg-ie/20 border-ie  data-[ready=false]:border-fuchsia-500"
                 />

@@ -14,15 +14,17 @@ mod auth;
 mod config;
 mod logs;
 mod resources;
+mod runtime;
 mod web;
 
+// data cloned/shared to all request handlers
 #[derive(Clone)]
 pub struct Shared {
     pub config: Arc<RwLock<config::Config>>,
     pub resources: resources::ResourcePool,
     pub oidc: auth::OidcClient,
     pub tx_service: Sender<api::service::MsgOut>,
-    pub tx_resources: Sender<String>,
+    pub tx_resources: Sender<Vec<resources::Resource>>,
 }
 
 #[tokio::main]
@@ -32,7 +34,7 @@ async fn main() -> Result<()> {
         std::env::var("GOOGLE_SSO_SECRET").context("GOOGLE_SSO_SECRET has not been setup")?;
 
     let (tx_service, _) = tokio::sync::broadcast::channel(32);
-    let (tx_resources, _) = tokio::sync::broadcast::channel(32);
+    let (tx_resources, _) = tokio::sync::broadcast::channel(64);
 
     let state = Shared {
         config: Arc::new(RwLock::new(config::Config::new().await?)),
@@ -43,7 +45,25 @@ async fn main() -> Result<()> {
         tx_service,
     };
 
+    let runtime_state = state.clone();
+    tokio::spawn(async move {
+        let interval_duration = runtime_state.config.read().await.interval;
+        let mut ticks = tokio::time::interval(interval_duration);
+        loop {
+            ticks.tick().await;
+
+            // handle interval changes
+            let interval = runtime_state.config.read().await.interval;
+            if interval != ticks.period() {
+                ticks = tokio::time::interval(interval);
+            }
+
+            runtime::tick(&runtime_state).await;
+        }
+    });
+
     let app = Router::new()
+        .route("/api/live", get(api::live::handle))
         .route("/api/resources", get(api::resources::list_resources))
         .nest(
             "/api",
@@ -60,6 +80,7 @@ async fn main() -> Result<()> {
 
     let listener = TcpListener::bind("0.0.0.0:80").await?;
 
+    println!("listening at localhost:80");
     axum::serve(listener, app)
         .await
         .context("failed to serve the app through TCP")

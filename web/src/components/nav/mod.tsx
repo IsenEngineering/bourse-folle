@@ -6,23 +6,27 @@ const Chevron = () => <svg xmlns="http://www.w3.org/2000/svg"
     <path d="m6 9 6 6 6-6"/>
 </svg>
 
-const Antenna = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path style="animation: 2s linear .66s infinite pulse-in" d="M16.247 7.761a6 6 0 0 1 0 8.478"/>
-    <path style="animation: 2s linear 1.33s infinite pulse-in" d="M19.075 4.933a10 10 0 0 1 0 14.134"/>
-    <path style="animation: 2s linear 1.33s infinite pulse-in" d="M4.925 19.067a10 10 0 0 1 0-14.134"/>
-    <path style="animation: 2s linear .66s infinite pulse-in" d="M7.753 16.239a6 6 0 0 1 0-8.478"/>
-    <circle cx="12" cy="12" r="2" style="animation: 2s linear 0 infinite pulse-in"/>
+const Layout = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+	class="data-[orientation=vertical]:rotate-90"
+	stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+	<rect width="18" height="18" x="3" y="3" rx="2" />
+	<path d="M3 12h18" />
 </svg>
 
-const Edit = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="m15 12-9.373 9.373a1 1 0 0 1-3.001-3L12 9"/><path d="m18 15 4-4"/>
-    <path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172v-.344a2 2 0 0 0-.586-1.414l-1.657-1.657A6 6 0 0 0 12.516
-    3H9l1.243 1.243A6 6 0 0 1 12 8.485V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"/>
+const Github = () => <svg viewBox="0 0 24 24" width="24" height="24" fill="#FFF">
+	<path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
 </svg>
 
-export default function Nav() {
+const Edit = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+	stroke="currentColor" stroke-width="2" stroke-linecap="round"
+	stroke-linejoin="round">
+	<path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5" />
+	<path d="M14 6a6 6 0 0 1 6 6v3" />
+	<path d="M4 15v-3a6 6 0 0 1 6-6" />
+	<rect x="2" y="15" width="20" height="4" rx="1" />
+</svg>
+
+export default function Nav(props: { orientation: 'horizontal' | 'vertical', onOrientationChange: () => void }) {
     const [hidden, setHidden] = createSignal(false)
     onMount(() => {
         const listener = (e: KeyboardEvent) => {
@@ -39,7 +43,7 @@ export default function Nav() {
     })
 
     return <Show when={!hidden()}>
-        <header class="mt-2 mr-2 mx-auto sm:mr-4 sm:mt-4 rounded-full h-auto sm:h-12 w-fit sm:w-2/3 lg:w-3/5 xl:w-2/5
+        <header class="mt-2 mr-2 mx-auto sm:mr-4 sm:mt-4 rounded-full h-auto sm:h-12 w-fit sm:w-auto
             p-1 bg-white/10 text-white sticky sm:relative top-0 backdrop-blur-xs z-30
             flex flex-row items-center justify-between gap-2">
             <p class="bg-white/75 text-black ml-1 px-2 py-1 font-bold rounded-full hidden sm:block">
@@ -49,10 +53,17 @@ export default function Nav() {
             </nav> */}
 
             <div class="flex flex-row items-center gap-0.5">
-                <a href="/" class="p-2 hover:bg-gray-800 transition-colors
+				<div class="p-2 hover:bg-gray-800 transition-colors cursor-pointer hidden lg:block
+                	data-[orientation=vertical]:*:rotate-90 *:transition-transform
+                    uppercase font-bold select-none rounded-full" data-orientation={props.orientation}
+                    draggable={false}
+                    onClick={props.onOrientationChange}>
+					<Layout />
+                </div>
+                <a href="https://github.com/IsenEngineering/bourse-folle" target="_blank" rel="external" class="p-2 hover:bg-gray-800 transition-colors
                     uppercase font-bold select-none rounded-full"
                     draggable={false}>
-                    <Antenna/>
+                    <Github/>
                 </a>
                 <a href="/auth/google" rel="external" class="p-2 hover:bg-gray-800 transition-colors
                     uppercase font-bold select-none rounded-full"

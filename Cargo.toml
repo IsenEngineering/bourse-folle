@@ -1,5 +1,5 @@
 [package]
-name = "bourse-folle"
+name = "bourse_folle"
 version = "0.1.0"
 edition = "2024"
 
@@ -16,4 +16,5 @@ serde = { version = "1.0.228", features = ["derive"]}
 serde_json = "1.0.145"
 time = "0.3.55"
 tokio = { version = "1.53.1", features = ["fs", "macros", "rt-multi-thread"] }
+tokio-stream = { version = "0.1.19", features = ["sync"] }
 tower-http = { version = "0.7.1", features = ["fs"] }

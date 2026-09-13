@@ -1,4 +1,9 @@
-use std::{collections::HashMap, path::PathBuf, sync::Arc};
+use std::{
+    collections::HashMap,
+    path::PathBuf,
+    sync::Arc,
+    time::{SystemTime, UNIX_EPOCH},
+};
 
 use anyhow::{Result, anyhow};
 use serde::{Deserialize, Serialize};
@@ -50,7 +55,7 @@ pub struct Resource {
     pub price_min: f32,
     pub price_max: f32,
     pub var: f32,
-    pub historic: Vec<f32>,
+    pub historic: Vec<(u32, f32)>,
     pub demande: usize,
     pub coef_volatility: f32,
     pub coef_strength: f32,
@@ -87,9 +92,16 @@ impl Resource {
                 self.id
             ));
         }
-        self.historic.insert(0, self.price);
+
+        let ts = (SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_secs()
+            / 60) as u32;
+        self.historic.insert(0, (ts, self.price));
         self.price = price;
-        self.var = price - self.historic.last().unwrap_or(&price);
+        self.demande = 0;
+        self.var = price - self.historic.last().unwrap_or(&(0, price)).1;
 
         Ok(())
     }

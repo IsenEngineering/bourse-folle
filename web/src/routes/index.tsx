@@ -1,31 +1,32 @@
-import Prix, { PRIX_PLACEHOLDER } from "../components/prix/mod"
-import { createContext, JSX, lazy, onCleanup, onMount, Show } from "solid-js";
+import Prix from "../components/prix/mod"
+import { createContext, createSignal, JSX, lazy, onMount, Show } from "solid-js";
 import Resizable from "@corvu/resizable";
 import { createStore, StoreReturn } from "solid-js/store";
 import Nav from "../components/nav/mod";
+import live from "../components/live";
 
 const Shader = lazy(() => import('../components/shader/mod'))
 const Graph = lazy(() => import('../components/graph/mod'))
-const Main = (props: { graph: JSX.Element, prix: JSX.Element }) => {
-    return <Show when={window.innerWidth > 900} fallback={<main class="h-full w-full gap-3 p-3 flex flex-col z-20">
+const Main = (props: { graph: JSX.Element, prix: JSX.Element, orientation: 'horizontal' | 'vertical' }) => {
+    return <Show when={window.innerWidth > 900} fallback={<main class="h-full w-full gap-3 p-1 sm:p-3 flex flex-col z-20">
         {/* affichage téléphone (colonne) */}
-        <section id="main-graph" class="border-2 border-gray-700 rounded-lg overflow-hidden min-h-[40vh]">
+        <section id="main-graph" class="border-2 border-gray-700 rounded-lg overflow-hidden min-h-[40vh] flex-3">
             {props.graph}
         </section>
-        <section class="border-2 border-gray-700 h-full rounded-lg overflow-hidden">
+        <section class="border-2 border-gray-700 h-full rounded-lg overflow-hidden flex-1">
             {props.prix}
         </section>
     </main>}>
         {/* affichage ordinateur (ligne) */}
         <Resizable class="h-full w-full gap-3 p-3 z-20 min-h-0
-        flex flex-col md:flex-row" orientation="horizontal" as="main"
+        flex flex-col md:flex-row" orientation={props.orientation} as="main"
             initialSizes={[0.7, 0.3]}>
-            <Resizable.Panel minSize="600px" class="border-2 border-gray-700 rounded-lg min-h-0
+            <Resizable.Panel minSize={ props.orientation === 'horizontal' ? "500px" : "300px"  } class="border-2 border-gray-700 rounded-lg min-h-0
                 overflow-hidden bg-gray-700/25" as="section" id="main-graph">
                 {props.graph}
             </Resizable.Panel>
-            <Resizable.Handle class="w-1"/>
-            <Resizable.Panel collapsible={true} minSize="500px" class="border-2 border-gray-700 h-full rounded-lg 
+            <Resizable.Handle style={props.orientation === 'horizontal' ? 'width: 4px' : 'height: 4px'} />
+            <Resizable.Panel collapsible={true} minSize={ props.orientation === 'horizontal' ? "500px" : "100px" } class="border-2 border-gray-700 h-full rounded-lg
                 overflow-hidden bg-gray-700/25" as="section">
                 {props.prix}
             </Resizable.Panel>
@@ -33,36 +34,31 @@ const Main = (props: { graph: JSX.Element, prix: JSX.Element }) => {
     </Show>
 }
 
-export const RessourcesCtx = createContext<StoreReturn<BourseFolle.Ressource[]>>()
+export const RessourcesCtx = createContext<StoreReturn<BourseFolle.Resource[]>>()
 export default () => {
-    const [ressources, setRessources] = createStore(PRIX_PLACEHOLDER)
+	const [resources, setResources] = createStore<BourseFolle.Resource[]>([])
+	const [orientation, setOrientation] = createSignal<'horizontal' | 'vertical'>(
+		window.innerWidth < 900 ? 'vertical' : 'horizontal'
+	)
 
-    onMount(() => {
-        let i = setInterval(() => {
-            setRessources(u => u.map(r => {
-                const prix = Math.floor((r.prix + Math.random() * 20 - 10) * 100) / 100
-                return { 
-                    ...r,
-                    variation: r.historique.length > 2 
-                        ? Math.floor((r.historique.at(0)!.prix - r.historique.at(-1)!.prix) * 100) / 100 
-                        : 0,
-                    historique: [...(r.historique.length > 30 
-                        ? r.historique.slice(1) 
-                        : r.historique), { prix, ts: Date.now() }],
-                    prix
-                }
-            }))
-        }, 500)
-
-        onCleanup(() => clearInterval(i))
+	onMount(async () => {
+		const session_orientation = sessionStorage.getItem("orientation") as 'horizontal' | 'vertical' | null
+		if(session_orientation) setOrientation(session_orientation)
+		live("/api/live", setResources)
     })
-    
-    return <RessourcesCtx.Provider value={[ressources, setRessources]}>
-        <Nav/>
-        <div class="absolute z-10 top-0 left-0 w-screen h-full">
+
+    return <RessourcesCtx.Provider value={[resources, setResources]}>
+		<Nav orientation={orientation()}
+			onOrientationChange={() => {
+				const new_orientation = orientation() == 'horizontal' ? 'vertical' : 'horizontal'
+				setOrientation(new_orientation)
+				sessionStorage.setItem("orientation", new_orientation)
+			}
+			} />
+        {/*<div class="absolute z-10 top-0 left-0 w-screen h-full">
             <Shader/>
-        </div>
-        <Main
+        </div>*/}
+        <Main orientation={orientation()}
             graph={<Graph/>}
             prix={<Prix/>}/>
     </RessourcesCtx.Provider>
